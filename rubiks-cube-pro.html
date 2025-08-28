@@ -181,7 +181,9 @@
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.cubes = [];
+        this.cubeStates = []; // Track cube states separately
         this.isAnimating = false;
+        this.animationQueue = [];
         this.moveHistory = [];
         this.totalMoves = 0;
         this.startTime = Date.now();
@@ -233,7 +235,11 @@
         const cubeSize = 0.95;
         const gap = 0.05;
         
+        // Create cube state tracking
+        this.cubeStates = [];
+        
         // Create 27 individual cubes (3x3x3)
+        let index = 0;
         for (let x = -1; x <= 1; x++) {
           for (let y = -1; y <= 1; y++) {
             for (let z = -1; z <= 1; z++) {
@@ -241,32 +247,46 @@
               
               // Create materials for each face
               const materials = [
-                new THREE.MeshLambertMaterial({ color: x === 1 ? colors.right : 0x333333 }),  // Right
-                new THREE.MeshLambertMaterial({ color: x === -1 ? colors.left : 0x333333 }),  // Left
-                new THREE.MeshLambertMaterial({ color: y === 1 ? colors.top : 0x333333 }),    // Top
-                new THREE.MeshLambertMaterial({ color: y === -1 ? colors.bottom : 0x333333 }), // Bottom
-                new THREE.MeshLambertMaterial({ color: z === 1 ? colors.front : 0x333333 }),  // Front
-                new THREE.MeshLambertMaterial({ color: z === -1 ? colors.back : 0x333333 })   // Back
+                new THREE.MeshLambertMaterial({ color: x === 1 ? colors.right : 0x222222 }),  // Right
+                new THREE.MeshLambertMaterial({ color: x === -1 ? colors.left : 0x222222 }),  // Left
+                new THREE.MeshLambertMaterial({ color: y === 1 ? colors.top : 0x222222 }),    // Top
+                new THREE.MeshLambertMaterial({ color: y === -1 ? colors.bottom : 0x222222 }), // Bottom
+                new THREE.MeshLambertMaterial({ color: z === 1 ? colors.front : 0x222222 }),  // Front
+                new THREE.MeshLambertMaterial({ color: z === -1 ? colors.back : 0x222222 })   // Back
               ];
               
               const cube = new THREE.Mesh(geometry, materials);
-              cube.position.set(x * (cubeSize + gap), y * (cubeSize + gap), z * (cubeSize + gap));
+              const position = new THREE.Vector3(
+                x * (cubeSize + gap), 
+                y * (cubeSize + gap), 
+                z * (cubeSize + gap)
+              );
+              
+              cube.position.copy(position);
               cube.castShadow = true;
               cube.receiveShadow = true;
               
-              // Store original position and grid coordinates
-              cube.userData = {
-                originalPosition: cube.position.clone(),
+              // Store cube state separately for safety
+              this.cubeStates[index] = {
+                index: index,
                 gridX: x,
                 gridY: y,
-                gridZ: z
+                gridZ: z,
+                position: position.clone(),
+                rotation: new THREE.Euler(0, 0, 0),
+                visible: true
               };
               
+              cube.userData = { index: index };
+              
               this.scene.add(cube);
-              this.cubes.push(cube);
+              this.cubes[index] = cube;
+              index++;
             }
           }
         }
+        
+        console.log(`Created ${this.cubes.length} cubes`);
       }
       
       setupControls() {
@@ -322,90 +342,124 @@
       }
       
       rotateFace(face, isPrime = false, isDouble = false) {
-        if (this.isAnimating) return;
+        // Add to animation queue instead of executing immediately
+        const move = { face, isPrime, isDouble };
+        this.animationQueue.push(move);
         
-        this.isAnimating = true;
-        const rotationAngle = isPrime ? Math.PI/2 : -Math.PI/2;
-        const iterations = isDouble ? 2 : 1;
-        
-        // Get cubes that belong to this face
-        const faceCubes = this.getFaceCubes(face);
-        
-        this.animateRotation(faceCubes, face, rotationAngle, iterations, () => {
-          this.isAnimating = false;
-          this.recordMove(face, isPrime, isDouble);
-          this.updateUI();
-        });
-      }
-      
-      getFaceCubes(face) {
-        switch (face) {
-          case 'U': return this.cubes.filter(cube => cube.userData.gridY === 1);
-          case 'D': return this.cubes.filter(cube => cube.userData.gridY === -1);
-          case 'R': return this.cubes.filter(cube => cube.userData.gridX === 1);
-          case 'L': return this.cubes.filter(cube => cube.userData.gridX === -1);
-          case 'F': return this.cubes.filter(cube => cube.userData.gridZ === 1);
-          case 'B': return this.cubes.filter(cube => cube.userData.gridZ === -1);
-          default: return [];
+        if (!this.isAnimating) {
+          this.processQueue();
         }
       }
       
-      animateRotation(cubes, face, angle, iterations, callback) {
+      processQueue() {
+        if (this.animationQueue.length === 0) {
+          this.isAnimating = false;
+          return;
+        }
+        
+        this.isAnimating = true;
+        const move = this.animationQueue.shift();
+        this.executeSingleMove(move.face, move.isPrime, move.isDouble);
+      }
+      
+      executeSingleMove(face, isPrime = false, isDouble = false) {
+        console.log(`Executing move: ${face}${isPrime ? "'" : ''}${isDouble ? '2' : ''}`);
+        
+        const rotationAngle = isPrime ? Math.PI/2 : -Math.PI/2;
+        const iterations = isDouble ? 2 : 1;
+        
+        // Get cube indices that belong to this face
+        const faceIndices = this.getFaceIndices(face);
+        console.log(`Face ${face} has ${faceIndices.length} cubes`);
+        
+        this.animateRotation(faceIndices, face, rotationAngle, iterations, () => {
+          this.recordMove(face, isPrime, isDouble);
+          this.updateUI();
+          this.processQueue(); // Process next move in queue
+        });
+      }
+      
+      getFaceIndices(face) {
+        const indices = [];
+        for (let i = 0; i < this.cubeStates.length; i++) {
+          const state = this.cubeStates[i];
+          if (!state.visible) continue;
+          
+          let belongsToFace = false;
+          switch (face) {
+            case 'U': belongsToFace = (state.gridY === 1); break;
+            case 'D': belongsToFace = (state.gridY === -1); break;
+            case 'R': belongsToFace = (state.gridX === 1); break;
+            case 'L': belongsToFace = (state.gridX === -1); break;
+            case 'F': belongsToFace = (state.gridZ === 1); break;
+            case 'B': belongsToFace = (state.gridZ === -1); break;
+          }
+          
+          if (belongsToFace) {
+            indices.push(i);
+          }
+        }
+        return indices;
+      }
+      
+      animateRotation(cubeIndices, face, angle, iterations, callback) {
         let currentIteration = 0;
         
         const performRotation = () => {
-          const group = new THREE.Group();
-          this.scene.add(group);
+          console.log(`Performing rotation ${currentIteration + 1}/${iterations} for face ${face}`);
           
-          // Add cubes to group
-          cubes.forEach(cube => {
-            this.scene.remove(cube);
-            group.add(cube);
-          });
-          
-          // Animate rotation
-          const startRotation = group.rotation.clone();
-          const targetRotation = startRotation.clone();
-          
-          switch (face) {
-            case 'U': case 'D':
-              targetRotation.y += angle;
-              break;
-            case 'R': case 'L':
-              targetRotation.x += angle;
-              break;
-            case 'F': case 'B':
-              targetRotation.z += angle;
-              break;
-          }
+          // Store initial positions and rotations
+          const initialStates = cubeIndices.map(index => ({
+            index,
+            position: this.cubes[index].position.clone(),
+            rotation: this.cubes[index].rotation.clone()
+          }));
           
           let progress = 0;
-          const duration = 300; // ms
+          const duration = 250; // ms
           const startTime = Date.now();
           
           const animate = () => {
             const elapsed = Date.now() - startTime;
             progress = Math.min(elapsed / duration, 1);
             
-            // Smooth easing
+            // Smooth easing function
             const eased = 1 - Math.pow(1 - progress, 3);
             
-            group.rotation.copy(startRotation);
-            group.rotation.lerp(targetRotation, eased);
+            // Apply rotation to each cube individually
+            cubeIndices.forEach((index, i) => {
+              if (!this.cubes[index] || !this.cubeStates[index]) return;
+              
+              const cube = this.cubes[index];
+              const initial = initialStates[i];
+              
+              // Calculate rotation around face center
+              const rotationMatrix = this.getRotationMatrix(face, angle * eased);
+              const newPosition = initial.position.clone().applyMatrix4(rotationMatrix);
+              const newRotation = initial.rotation.clone();
+              
+              // Apply rotation to the cube's own rotation
+              switch (face) {
+                case 'U': case 'D':
+                  newRotation.y += angle * eased;
+                  break;
+                case 'R': case 'L':
+                  newRotation.x += angle * eased;
+                  break;
+                case 'F': case 'B':
+                  newRotation.z += angle * eased;
+                  break;
+              }
+              
+              cube.position.copy(newPosition);
+              cube.rotation.copy(newRotation);
+            });
             
             if (progress < 1) {
               requestAnimationFrame(animate);
             } else {
-              // Remove cubes from group and add back to scene
-              while (group.children.length > 0) {
-                const cube = group.children[0];
-                group.remove(cube);
-                this.scene.add(cube);
-              }
-              this.scene.remove(group);
-              
-              // Update cube grid positions
-              this.updateCubePositions(cubes, face, angle > 0);
+              // Animation complete - update cube states
+              this.updateCubeStatesAfterRotation(cubeIndices, face, angle > 0);
               
               currentIteration++;
               if (currentIteration < iterations) {
@@ -422,80 +476,117 @@
         performRotation();
       }
       
-      updateCubePositions(cubes, face, clockwise) {
-        cubes.forEach(cube => {
-          const { gridX, gridY, gridZ } = cube.userData;
+      getRotationMatrix(face, angle) {
+        const matrix = new THREE.Matrix4();
+        switch (face) {
+          case 'U':
+            matrix.makeRotationY(angle);
+            break;
+          case 'D':
+            matrix.makeRotationY(-angle);
+            break;
+          case 'R':
+            matrix.makeRotationX(angle);
+            break;
+          case 'L':
+            matrix.makeRotationX(-angle);
+            break;
+          case 'F':
+            matrix.makeRotationZ(angle);
+            break;
+          case 'B':
+            matrix.makeRotationZ(-angle);
+            break;
+        }
+        return matrix;
+      }
+      
+      updateCubeStatesAfterRotation(cubeIndices, face, clockwise) {
+        cubeIndices.forEach(index => {
+          const state = this.cubeStates[index];
+          if (!state) return;
+          
+          const { gridX, gridY, gridZ } = state;
           let newX = gridX, newY = gridY, newZ = gridZ;
           
           switch (face) {
             case 'U':
               if (clockwise) {
-                newX = gridZ;
-                newZ = -gridX;
-              } else {
                 newX = -gridZ;
                 newZ = gridX;
+              } else {
+                newX = gridZ;
+                newZ = -gridX;
               }
               break;
             case 'D':
               if (clockwise) {
-                newX = -gridZ;
-                newZ = gridX;
-              } else {
                 newX = gridZ;
                 newZ = -gridX;
+              } else {
+                newX = -gridZ;
+                newZ = gridX;
               }
               break;
             case 'R':
               if (clockwise) {
-                newY = gridZ;
-                newZ = -gridY;
-              } else {
                 newY = -gridZ;
                 newZ = gridY;
+              } else {
+                newY = gridZ;
+                newZ = -gridY;
               }
               break;
             case 'L':
               if (clockwise) {
-                newY = -gridZ;
-                newZ = gridY;
-              } else {
                 newY = gridZ;
                 newZ = -gridY;
+              } else {
+                newY = -gridZ;
+                newZ = gridY;
               }
               break;
             case 'F':
               if (clockwise) {
-                newX = -gridY;
-                newY = gridX;
-              } else {
                 newX = gridY;
                 newY = -gridX;
+              } else {
+                newX = -gridY;
+                newY = gridX;
               }
               break;
             case 'B':
               if (clockwise) {
-                newX = gridY;
-                newY = -gridX;
-              } else {
                 newX = -gridY;
                 newY = gridX;
+              } else {
+                newX = gridY;
+                newY = -gridX;
               }
               break;
           }
           
-          cube.userData.gridX = newX;
-          cube.userData.gridY = newY;
-          cube.userData.gridZ = newZ;
+          // Update cube state
+          state.gridX = newX;
+          state.gridY = newY;
+          state.gridZ = newZ;
           
+          // Update cube position
           const cubeSize = 0.95;
           const gap = 0.05;
-          cube.position.set(
+          const newPosition = new THREE.Vector3(
             newX * (cubeSize + gap),
             newY * (cubeSize + gap),
             newZ * (cubeSize + gap)
           );
+          
+          state.position.copy(newPosition);
+          if (this.cubes[index]) {
+            this.cubes[index].position.copy(newPosition);
+          }
         });
+        
+        console.log(`Updated positions for ${cubeIndices.length} cubes after ${face} rotation`);
       }
       
       recordMove(face, isPrime, isDouble) {
@@ -552,27 +643,52 @@
       }
       
       reset() {
-        if (this.isAnimating) return;
+        if (this.isAnimating) {
+          this.animationQueue = []; // Clear queue
+        }
+        this.isAnimating = false;
         
         this.moveHistory = [];
         this.totalMoves = 0;
         
         // Reset all cube positions and orientations
-        this.cubes.forEach((cube, index) => {
-          const x = Math.floor(index / 9) - 1;
-          const y = Math.floor((index % 9) / 3) - 1;
-          const z = (index % 3) - 1;
+        for (let i = 0; i < this.cubes.length; i++) {
+          const cube = this.cubes[i];
+          const state = this.cubeStates[i];
           
-          cube.userData.gridX = x;
-          cube.userData.gridY = y;
-          cube.userData.gridZ = z;
-          
-          const cubeSize = 0.95;
-          const gap = 0.05;
-          cube.position.set(x * (cubeSize + gap), y * (cubeSize + gap), z * (cubeSize + gap));
-          cube.rotation.set(0, 0, 0);
-        });
+          if (cube && state) {
+            // Reset to original grid position
+            const x = Math.floor(i / 9) - 1;
+            const y = Math.floor((i % 9) / 3) - 1;
+            const z = (i % 3) - 1;
+            
+            state.gridX = x;
+            state.gridY = y;
+            state.gridZ = z;
+            state.visible = true;
+            
+            const cubeSize = 0.95;
+            const gap = 0.05;
+            const position = new THREE.Vector3(
+              x * (cubeSize + gap), 
+              y * (cubeSize + gap), 
+              z * (cubeSize + gap)
+            );
+            
+            state.position.copy(position);
+            cube.position.copy(position);
+            cube.rotation.set(0, 0, 0);
+            state.rotation.set(0, 0, 0);
+            
+            // Ensure cube is visible and in scene
+            cube.visible = true;
+            if (!this.scene.children.includes(cube)) {
+              this.scene.add(cube);
+            }
+          }
+        }
         
+        console.log('Cube reset completed');
         this.updateUI();
       }
       

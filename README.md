@@ -2,8 +2,26 @@
 
 A collection of fun, coded games for entertainment and experimentation!
 
-## 🧊 3D Rubik's Cube
-Interactive 3D Rubik's Cube built with pure HTML, CSS 3D transforms, and JavaScript.
+## 🚀 3D Rubik's Cube Pro (Three.js Enhanced)
+The ultimate 3D Rubik's Cube experience built with Three.js for realistic rendering and smooth gameplay.
+
+### Features:
+- **Realistic 3D Graphics**: Three.js WebGL rendering with proper lighting and shadows
+- **Smooth Animations**: Buttery-smooth face rotations with easing
+- **Intuitive Controls**: 
+  - Drag to rotate the entire cube view
+  - Mouse wheel to zoom in/out
+  - Click-and-drag face rotations
+  - Keyboard shortcuts (U, D, L, R, F, B + Shift for prime)
+- **Professional UI**: Modern control panel with statistics tracking
+- **Advanced Features**:
+  - Move counter and timer
+  - Auto-solve algorithm
+  - Smart scrambling
+  - Real-time status updates
+
+## 🧊 3D Rubik's Cube (Classic CSS)
+Original lightweight version using pure CSS 3D transforms.
 
 ### Features:
 - **3D Visualization**: CSS 3D transforms create a realistic cube experience

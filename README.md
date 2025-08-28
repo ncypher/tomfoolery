@@ -6,7 +6,31 @@ A collection of fun, coded games for entertainment and experimentation!
 
 A collection of fun, coded games for entertainment and experimentation!
 
-## 🐍 Snake Pro (Enhanced)
+## � Space Invaders Pro (Retro Arcade Enhanced)
+Classic space combat with modern JavaScript and cyberpunk aesthetics.
+
+### Features:
+- **Neon Cyberpunk Design**: Glowing elements, particle effects, and retro-futuristic styling
+- **Advanced Game Mechanics**: 
+  - Multiple enemy types with different behaviors
+  - Progressive difficulty levels
+  - Lives system and high score tracking
+  - Dynamic enemy AI and shooting patterns
+- **Enhanced Audio**: Procedural sound effects using Web Audio API
+- **Visual Effects**: 
+  - Particle explosions on enemy destruction
+  - Animated starfield background
+  - Smooth bullet trails and glow effects
+  - Screen shake and flash effects
+- **Professional Polish**: Class-based architecture, game state management, and responsive controls
+
+### Controls:
+- **Movement**: Arrow keys or A/D
+- **Fire**: Space bar
+- **Pause**: P key  
+- **Reset**: R key
+
+## �🐍 Snake Pro (Enhanced)
 Modern Snake game with professional graphics and smooth gameplay mechanics.
 
 ### Features:

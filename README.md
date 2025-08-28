@@ -2,6 +2,31 @@
 
 A collection of fun, coded games for entertainment and experimentation!
 
+# 🎮 Tomfoolery Games
+
+A collection of fun, coded games for entertainment and experimentation!
+
+## 🐍 Snake Pro (Enhanced)
+Modern Snake game with professional graphics and smooth gameplay mechanics.
+
+### Features:
+- **Enhanced Graphics**: Smooth animations, particle effects, and modern styling
+- **Professional UI**: Beautiful dark theme with glowing elements and gradients
+- **Advanced Game Options**:
+  - Wrap-around walls (torus mode)
+  - Backtrack prevention
+  - Visual trail effects
+  - Particle effects on food consumption
+- **Smooth Gameplay**: Progressive speed increases and responsive controls
+- **High Score System**: Persistent high score tracking
+- **Responsive Design**: Works great on desktop and mobile devices
+
+### Controls:
+- **Movement**: WASD keys or Arrow keys
+- **Pause/Resume**: Space bar or P key
+- **Restart**: R key
+- **Options**: Toggle various visual and gameplay settings
+
 ## 🚀 3D Rubik's Cube Pro (Three.js Enhanced)
 The ultimate 3D Rubik's Cube experience built with Three.js for realistic rendering and smooth gameplay.
 

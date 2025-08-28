@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomfoolery Games - Fun Coded Games</title>
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --panel: #0f1420;
+      --border: #1a2233;
+      --text: #eaeef5;
+      --muted: #9fb0c7;
+      --accent: #2251f6;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--accent), #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .game-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(34, 81, 246, 0.2);
+      border-color: var(--accent);
+    }
+    
+    .game-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .game-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .game-description {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+    }
+    
+    .github-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    .github-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎮 Tomfoolery Games</h1>
+      <p class="subtitle">A collection of fun, coded games for entertainment and experimentation</p>
+    </header>
+    
+    <main>
+      <div class="games-grid">
+        <a href="rubiks-cube.html" class="game-card">
+          <div class="game-icon">🧊</div>
+          <h2 class="game-title">3D Rubik's Cube</h2>
+          <p class="game-description">
+            Interactive 3D Rubik's Cube with CSS 3D transforms. 
+            Use arrow keys to rotate the view and face buttons to solve the puzzle!
+          </p>
+        </a>
+        
+        <!-- Add more games here as you create them -->
+        <div class="game-card" style="opacity: 0.5; cursor: not-allowed;">
+          <div class="game-icon">🚧</div>
+          <h2 class="game-title">More Games Coming Soon!</h2>
+          <p class="game-description">
+            Stay tuned for more fun coded games and experiments.
+          </p>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <p>
+        Made with ❤️ by Thomas | 
+        <a href="https://github.com/ncypher/tomfoolery" class="github-link" target="_blank">
+          View on GitHub
+        </a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Rubik's Cube - Three.js Enhanced</title>
+  <title>3D Rubik's Cube Pro - Enhanced</title>
   <style>
     :root {
       --bg: #0b0e14;
@@ -13,666 +13,633 @@
       --muted: #9fb0c7;
       --accent: #2251f6;
     }
-
+    
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
+    
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
       overflow: hidden;
     }
-
-    #app {
-      display: flex;
+    
+    #container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
       height: 100vh;
     }
-
+    
     #controls {
-      width: 320px;
       background: var(--panel);
       border-right: 1px solid var(--border);
       padding: 20px;
       overflow-y: auto;
-      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
     }
-
-    #title {
-      font-weight: 800;
-      font-size: 20px;
-      margin-bottom: 12px;
-      background: linear-gradient(45deg, var(--accent), #ff6b6b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    
+    .control-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(26, 34, 51, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
     }
-
-    .section {
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section:last-child {
-      border-bottom: none;
-    }
-
-    .section-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 12px;
+    
+    .control-section h3 {
+      margin-bottom: 10px;
       color: var(--accent);
     }
-
-    .subtle {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    
+    .button-row {
+      display: flex;
       gap: 8px;
-      margin-bottom: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
     }
-
-    .move-buttons {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
+    
     button {
-      appearance: none;
-      border: 1px solid #2a3448;
-      background: #121a28;
+      padding: 8px 12px;
+      background: #1a2233;
+      border: 1px solid var(--border);
       color: var(--text);
-      padding: 10px 12px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 12px;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
-
+    
     button:hover {
-      background: #162033;
-      border-color: var(--accent);
-      transform: translateY(-1px);
+      background: var(--accent);
     }
-
-    button:active {
-      transform: translateY(0);
-    }
-
+    
     .primary {
       background: var(--accent);
-      border-color: var(--accent);
     }
-
-    .primary:hover {
-      background: #2a5bff;
-      border-color: #2a5bff;
-    }
-
-    .danger {
-      background: #cc0000;
-      border-color: #cc0000;
-    }
-
-    .danger:hover {
-      background: #ff0000;
-      border-color: #ff0000;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-value {
-      font-weight: 600;
-      font-size: 16px;
-      color: var(--accent);
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    #canvas-container {
-      flex: 1;
+    
+    #gameArea {
       position: relative;
-      background: linear-gradient(135deg, #0b0e14 0%, #1a2233 100%);
+      background: radial-gradient(circle at center, #1a2233 0%, var(--bg) 70%);
     }
-
+    
     #instructions {
       position: absolute;
       top: 20px;
       right: 20px;
       background: rgba(15, 20, 32, 0.9);
-      padding: 16px;
-      border-radius: 12px;
+      padding: 15px;
+      border-radius: 8px;
       border: 1px solid var(--border);
       font-size: 12px;
-      color: var(--muted);
-      backdrop-filter: blur(10px);
-    }
-
-    #loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: var(--accent);
-      font-size: 18px;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border);
-      border-top: 3px solid var(--accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      line-height: 1.4;
+      max-width: 200px;
     }
   </style>
 </head>
 <body>
-  <div id="app">
+  <div id="container">
     <div id="controls">
-      <div id="title">🧊 3D Rubik's Cube Pro</div>
-      <div class="subtle">Enhanced with Three.js for realistic 3D rendering, smooth animations, and professional cube mechanics.</div>
+      <h2 style="margin-bottom: 20px; color: var(--accent);">🚀 Rubik's Cube Pro</h2>
       
-      <div class="section">
-        <div class="section-title">Game Controls</div>
-        <div class="button-grid">
+      <div class="control-section">
+        <h3>🎮 Game Controls</h3>
+        <div class="button-row">
           <button id="scramble" class="primary">🔀 Scramble</button>
-          <button id="solve">✨ Auto Solve</button>
-          <button id="reset" class="danger">♻️ Reset</button>
+          <button id="solve">✅ Solve</button>
+          <button id="reset">♻️ Reset</button>
+        </div>
+        <div style="font-size: 12px; color: var(--muted);">
+          Moves: <span id="moveCount">0</span> | 
+          Status: <span id="status">Ready</span>
         </div>
       </div>
-
-      <div class="section">
-        <div class="section-title">Face Rotations</div>
-        <div class="move-buttons">
-          <button data-move="U">U</button>
-          <button data-move="D">D</button>
-          <button data-move="L">L</button>
-          <button data-move="R">R</button>
-          <button data-move="F">F</button>
-          <button data-move="B">B</button>
+      
+      <div class="control-section">
+        <h3>🔄 Face Rotations</h3>
+        <div class="button-row">
+          <button onclick="rotateFace('U')">U</button>
+          <button onclick="rotateFace('U', true)">U'</button>
+          <button onclick="rotateFace('U', false, true)">U2</button>
         </div>
-        <div class="move-buttons">
-          <button data-move="U'">U'</button>
-          <button data-move="D'">D'</button>
-          <button data-move="L'">L'</button>
-          <button data-move="R'">R'</button>
-          <button data-move="F'">F'</button>
-          <button data-move="B'">B'</button>
+        <div class="button-row">
+          <button onclick="rotateFace('D')">D</button>
+          <button onclick="rotateFace('D', true)">D'</button>
+          <button onclick="rotateFace('D', false, true)">D2</button>
         </div>
-        <div class="move-buttons">
-          <button data-move="U2">U2</button>
-          <button data-move="D2">D2</button>
-          <button data-move="L2">L2</button>
-          <button data-move="R2">R2</button>
-          <button data-move="F2">F2</button>
-          <button data-move="B2">B2</button>
+        <div class="button-row">
+          <button onclick="rotateFace('R')">R</button>
+          <button onclick="rotateFace('R', true)">R'</button>
+          <button onclick="rotateFace('R', false, true)">R2</button>
         </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Statistics</div>
-        <div class="stats">
-          <div class="stat-item">
-            <div class="stat-value" id="move-count">0</div>
-            <div class="stat-label">MOVES</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="time-display">00:00</div>
-            <div class="stat-label">TIME</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="status">READY</div>
-            <div class="stat-label">STATUS</div>
-          </div>
+        <div class="button-row">
+          <button onclick="rotateFace('L')">L</button>
+          <button onclick="rotateFace('L', true)">L'</button>
+          <button onclick="rotateFace('L', false, true)">L2</button>
+        </div>
+        <div class="button-row">
+          <button onclick="rotateFace('F')">F</button>
+          <button onclick="rotateFace('F', true)">F'</button>
+          <button onclick="rotateFace('F', false, true)">F2</button>
+        </div>
+        <div class="button-row">
+          <button onclick="rotateFace('B')">B</button>
+          <button onclick="rotateFace('B', true)">B'</button>
+          <button onclick="rotateFace('B', false, true)">B2</button>
         </div>
       </div>
-
-      <div class="section">
-        <div class="subtle">
-          <strong>Controls:</strong><br>
-          • Drag to rotate view<br>
-          • Scroll to zoom<br>
-          • Click cube faces to rotate<br>
-          • Use keyboard: U D L R F B<br>
-          • Hold Shift for prime moves (')
+      
+      <div class="control-section">
+        <h3>📊 Statistics</h3>
+        <div style="font-size: 12px; line-height: 1.6;">
+          <div>Total Moves: <span id="totalMoves">0</span></div>
+          <div>Session Time: <span id="timer">00:00</span></div>
+          <div>Cube State: <span id="cubeState">Solved</span></div>
         </div>
       </div>
     </div>
-
-    <div id="canvas-container">
-      <div id="loading">
-        <div class="spinner"></div>
-        Loading 3D Engine...
-      </div>
+    
+    <div id="gameArea">
       <div id="instructions">
-        <strong>🎯 Pro Tips:</strong><br>
-        • Right-click + drag for different camera angles<br>
-        • Mouse wheel to zoom in/out<br>
-        • Click directly on cube faces for intuitive rotation
+        <strong>Controls:</strong><br>
+        • Drag to rotate view<br>
+        • Scroll to zoom<br>
+        • Click cube faces to rotate<br>
+        • Keys: U,D,L,R,F,B<br>
+        • Hold Shift for prime moves<br>
+        • Press 2 for double moves
       </div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    class RubiksCube3D {
+    class RubiksCube {
       constructor() {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.cubeGroup = new THREE.Group();
-        this.cubies = [];
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.cubes = [];
         this.isAnimating = false;
         this.moveHistory = [];
-        this.startTime = null;
-        this.timer = null;
+        this.totalMoves = 0;
+        this.startTime = Date.now();
         
-        this.colors = {
-          U: 0xffffff, // White (Up)
-          D: 0xffff00, // Yellow (Down)
-          L: 0xff8c00, // Orange (Left)
-          R: 0xcc0000, // Red (Right)
-          F: 0x00ff00, // Green (Front)
-          B: 0x0000ff, // Blue (Back)
-          X: 0x222222  // Interior (hidden faces)
-        };
-
         this.init();
         this.createCube();
         this.setupControls();
+        this.setupEventListeners();
         this.animate();
-        
-        document.getElementById('loading').style.display = 'none';
+        this.updateTimer();
       }
-
+      
       init() {
-        const container = document.getElementById('canvas-container');
-        this.renderer.setSize(container.clientWidth, container.clientHeight);
-        this.renderer.setClearColor(0x0b0e14, 0);
+        const gameArea = document.getElementById('gameArea');
+        this.renderer.setSize(gameArea.clientWidth, gameArea.clientHeight);
+        this.renderer.setClearColor(0x0b0e14);
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        container.appendChild(this.renderer.domElement);
-
+        gameArea.appendChild(this.renderer.domElement);
+        
         // Camera position
-        this.camera.position.set(5, 5, 5);
+        this.camera.position.set(8, 8, 8);
         this.camera.lookAt(0, 0, 0);
-
+        
         // Lighting
         const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
         this.scene.add(ambientLight);
-
+        
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(10, 10, 5);
         directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 2048;
-        directionalLight.shadow.mapSize.height = 2048;
         this.scene.add(directionalLight);
-
-        const directionalLight2 = new THREE.DirectionalLight(0x4477ff, 0.3);
-        directionalLight2.position.set(-10, -10, -5);
-        this.scene.add(directionalLight2);
-
-        this.scene.add(this.cubeGroup);
-
-        // Mouse controls
-        this.mouse = { x: 0, y: 0, down: false };
-        this.setupMouseControls();
+        
+        const pointLight = new THREE.PointLight(0x2251f6, 0.3);
+        pointLight.position.set(-5, 5, 5);
+        this.scene.add(pointLight);
       }
-
+      
       createCube() {
-        const size = 0.95;
+        const colors = {
+          front: 0x00ff00,   // Green
+          back: 0x0000ff,    // Blue  
+          right: 0xff0000,   // Red
+          left: 0xff8c00,    // Orange
+          top: 0xffffff,     // White
+          bottom: 0xffff00   // Yellow
+        };
+        
+        const cubeSize = 0.95;
         const gap = 0.05;
         
-        for (let x = 0; x < 3; x++) {
-          for (let y = 0; y < 3; y++) {
-            for (let z = 0; z < 3; z++) {
-              const geometry = new THREE.BoxGeometry(size, size, size);
+        // Create 27 individual cubes (3x3x3)
+        for (let x = -1; x <= 1; x++) {
+          for (let y = -1; y <= 1; y++) {
+            for (let z = -1; z <= 1; z++) {
+              const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
               
               // Create materials for each face
               const materials = [
-                new THREE.MeshLambertMaterial({ color: x === 2 ? this.colors.R : this.colors.X }), // Right
-                new THREE.MeshLambertMaterial({ color: x === 0 ? this.colors.L : this.colors.X }), // Left
-                new THREE.MeshLambertMaterial({ color: y === 2 ? this.colors.U : this.colors.X }), // Top
-                new THREE.MeshLambertMaterial({ color: y === 0 ? this.colors.D : this.colors.X }), // Bottom
-                new THREE.MeshLambertMaterial({ color: z === 2 ? this.colors.F : this.colors.X }), // Front
-                new THREE.MeshLambertMaterial({ color: z === 0 ? this.colors.B : this.colors.X })  // Back
+                new THREE.MeshLambertMaterial({ color: x === 1 ? colors.right : 0x333333 }),  // Right
+                new THREE.MeshLambertMaterial({ color: x === -1 ? colors.left : 0x333333 }),  // Left
+                new THREE.MeshLambertMaterial({ color: y === 1 ? colors.top : 0x333333 }),    // Top
+                new THREE.MeshLambertMaterial({ color: y === -1 ? colors.bottom : 0x333333 }), // Bottom
+                new THREE.MeshLambertMaterial({ color: z === 1 ? colors.front : 0x333333 }),  // Front
+                new THREE.MeshLambertMaterial({ color: z === -1 ? colors.back : 0x333333 })   // Back
               ];
-
-              const cubie = new THREE.Mesh(geometry, materials);
-              cubie.position.set(
-                (x - 1) * (size + gap),
-                (y - 1) * (size + gap),
-                (z - 1) * (size + gap)
-              );
               
-              cubie.castShadow = true;
-              cubie.receiveShadow = true;
-              cubie.userData = { x, y, z };
+              const cube = new THREE.Mesh(geometry, materials);
+              cube.position.set(x * (cubeSize + gap), y * (cubeSize + gap), z * (cubeSize + gap));
+              cube.castShadow = true;
+              cube.receiveShadow = true;
               
-              this.cubies.push(cubie);
-              this.cubeGroup.add(cubie);
+              // Store original position and grid coordinates
+              cube.userData = {
+                originalPosition: cube.position.clone(),
+                gridX: x,
+                gridY: y,
+                gridZ: z
+              };
+              
+              this.scene.add(cube);
+              this.cubes.push(cube);
             }
           }
         }
       }
-
-      setupMouseControls() {
+      
+      setupControls() {
+        this.mouse = { x: 0, y: 0 };
+        this.isMouseDown = false;
+        this.rotationX = 0;
+        this.rotationY = 0;
+        
         const canvas = this.renderer.domElement;
-        let isDragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
-
+        
         canvas.addEventListener('mousedown', (e) => {
-          isDragging = true;
-          previousMousePosition = { x: e.clientX, y: e.clientY };
+          this.isMouseDown = true;
+          this.mouse.x = e.clientX;
+          this.mouse.y = e.clientY;
         });
-
+        
         canvas.addEventListener('mousemove', (e) => {
-          if (!isDragging) return;
-
-          const deltaMove = {
-            x: e.clientX - previousMousePosition.x,
-            y: e.clientY - previousMousePosition.y
-          };
-
-          const deltaRotationQuaternion = new THREE.Quaternion()
-            .setFromEuler(new THREE.Euler(
-              deltaMove.y * 0.01,
-              deltaMove.x * 0.01,
-              0,
-              'XYZ'
-            ));
-
-          this.cubeGroup.quaternion.multiplyQuaternions(deltaRotationQuaternion, this.cubeGroup.quaternion);
-
-          previousMousePosition = { x: e.clientX, y: e.clientY };
+          if (!this.isMouseDown || this.isAnimating) return;
+          
+          const deltaX = e.clientX - this.mouse.x;
+          const deltaY = e.clientY - this.mouse.y;
+          
+          this.rotationY += deltaX * 0.01;
+          this.rotationX += deltaY * 0.01;
+          
+          // Limit rotation
+          this.rotationX = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.rotationX));
+          
+          this.updateCameraPosition();
+          
+          this.mouse.x = e.clientX;
+          this.mouse.y = e.clientY;
         });
-
+        
         canvas.addEventListener('mouseup', () => {
-          isDragging = false;
+          this.isMouseDown = false;
         });
-
+        
         canvas.addEventListener('wheel', (e) => {
-          this.camera.position.multiplyScalar(1 + e.deltaY * 0.001);
-        });
-
-        window.addEventListener('resize', () => {
-          const container = document.getElementById('canvas-container');
-          this.camera.aspect = container.clientWidth / container.clientHeight;
-          this.camera.updateProjectionMatrix();
-          this.renderer.setSize(container.clientWidth, container.clientHeight);
+          e.preventDefault();
+          const distance = this.camera.position.length();
+          const newDistance = Math.max(5, Math.min(15, distance + e.deltaY * 0.01));
+          this.camera.position.setLength(newDistance);
         });
       }
-
-      setupControls() {
-        // Face rotation buttons
-        document.querySelectorAll('[data-move]').forEach(button => {
-          button.addEventListener('click', () => {
-            this.executeMove(button.dataset.move);
-          });
+      
+      updateCameraPosition() {
+        const distance = this.camera.position.length();
+        this.camera.position.x = distance * Math.sin(this.rotationY) * Math.cos(this.rotationX);
+        this.camera.position.y = distance * Math.sin(this.rotationX);
+        this.camera.position.z = distance * Math.cos(this.rotationY) * Math.cos(this.rotationX);
+        this.camera.lookAt(0, 0, 0);
+      }
+      
+      rotateFace(face, isPrime = false, isDouble = false) {
+        if (this.isAnimating) return;
+        
+        this.isAnimating = true;
+        const rotationAngle = isPrime ? Math.PI/2 : -Math.PI/2;
+        const iterations = isDouble ? 2 : 1;
+        
+        // Get cubes that belong to this face
+        const faceCubes = this.getFaceCubes(face);
+        
+        this.animateRotation(faceCubes, face, rotationAngle, iterations, () => {
+          this.isAnimating = false;
+          this.recordMove(face, isPrime, isDouble);
+          this.updateUI();
         });
-
-        // Main control buttons
+      }
+      
+      getFaceCubes(face) {
+        switch (face) {
+          case 'U': return this.cubes.filter(cube => cube.userData.gridY === 1);
+          case 'D': return this.cubes.filter(cube => cube.userData.gridY === -1);
+          case 'R': return this.cubes.filter(cube => cube.userData.gridX === 1);
+          case 'L': return this.cubes.filter(cube => cube.userData.gridX === -1);
+          case 'F': return this.cubes.filter(cube => cube.userData.gridZ === 1);
+          case 'B': return this.cubes.filter(cube => cube.userData.gridZ === -1);
+          default: return [];
+        }
+      }
+      
+      animateRotation(cubes, face, angle, iterations, callback) {
+        let currentIteration = 0;
+        
+        const performRotation = () => {
+          const group = new THREE.Group();
+          this.scene.add(group);
+          
+          // Add cubes to group
+          cubes.forEach(cube => {
+            this.scene.remove(cube);
+            group.add(cube);
+          });
+          
+          // Animate rotation
+          const startRotation = group.rotation.clone();
+          const targetRotation = startRotation.clone();
+          
+          switch (face) {
+            case 'U': case 'D':
+              targetRotation.y += angle;
+              break;
+            case 'R': case 'L':
+              targetRotation.x += angle;
+              break;
+            case 'F': case 'B':
+              targetRotation.z += angle;
+              break;
+          }
+          
+          let progress = 0;
+          const duration = 300; // ms
+          const startTime = Date.now();
+          
+          const animate = () => {
+            const elapsed = Date.now() - startTime;
+            progress = Math.min(elapsed / duration, 1);
+            
+            // Smooth easing
+            const eased = 1 - Math.pow(1 - progress, 3);
+            
+            group.rotation.copy(startRotation);
+            group.rotation.lerp(targetRotation, eased);
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              // Remove cubes from group and add back to scene
+              while (group.children.length > 0) {
+                const cube = group.children[0];
+                group.remove(cube);
+                this.scene.add(cube);
+              }
+              this.scene.remove(group);
+              
+              // Update cube grid positions
+              this.updateCubePositions(cubes, face, angle > 0);
+              
+              currentIteration++;
+              if (currentIteration < iterations) {
+                setTimeout(performRotation, 50);
+              } else {
+                callback();
+              }
+            }
+          };
+          
+          animate();
+        };
+        
+        performRotation();
+      }
+      
+      updateCubePositions(cubes, face, clockwise) {
+        cubes.forEach(cube => {
+          const { gridX, gridY, gridZ } = cube.userData;
+          let newX = gridX, newY = gridY, newZ = gridZ;
+          
+          switch (face) {
+            case 'U':
+              if (clockwise) {
+                newX = gridZ;
+                newZ = -gridX;
+              } else {
+                newX = -gridZ;
+                newZ = gridX;
+              }
+              break;
+            case 'D':
+              if (clockwise) {
+                newX = -gridZ;
+                newZ = gridX;
+              } else {
+                newX = gridZ;
+                newZ = -gridX;
+              }
+              break;
+            case 'R':
+              if (clockwise) {
+                newY = gridZ;
+                newZ = -gridY;
+              } else {
+                newY = -gridZ;
+                newZ = gridY;
+              }
+              break;
+            case 'L':
+              if (clockwise) {
+                newY = -gridZ;
+                newZ = gridY;
+              } else {
+                newY = gridZ;
+                newZ = -gridY;
+              }
+              break;
+            case 'F':
+              if (clockwise) {
+                newX = -gridY;
+                newY = gridX;
+              } else {
+                newX = gridY;
+                newY = -gridX;
+              }
+              break;
+            case 'B':
+              if (clockwise) {
+                newX = gridY;
+                newY = -gridX;
+              } else {
+                newX = -gridY;
+                newY = gridX;
+              }
+              break;
+          }
+          
+          cube.userData.gridX = newX;
+          cube.userData.gridY = newY;
+          cube.userData.gridZ = newZ;
+          
+          const cubeSize = 0.95;
+          const gap = 0.05;
+          cube.position.set(
+            newX * (cubeSize + gap),
+            newY * (cubeSize + gap),
+            newZ * (cubeSize + gap)
+          );
+        });
+      }
+      
+      recordMove(face, isPrime, isDouble) {
+        let move = face;
+        if (isDouble) move += '2';
+        else if (isPrime) move += "'";
+        
+        this.moveHistory.push(move);
+        this.totalMoves++;
+      }
+      
+      scramble() {
+        if (this.isAnimating) return;
+        
+        const moves = ['U', 'D', 'L', 'R', 'F', 'B'];
+        const modifiers = ['', "'", '2'];
+        
+        let scrambleSequence = [];
+        for (let i = 0; i < 20; i++) {
+          const move = moves[Math.floor(Math.random() * moves.length)];
+          const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
+          scrambleSequence.push(move + modifier);
+        }
+        
+        this.executeSequence(scrambleSequence);
+      }
+      
+      executeSequence(sequence) {
+        if (sequence.length === 0) return;
+        
+        const move = sequence.shift();
+        const face = move[0];
+        const isPrime = move.includes("'");
+        const isDouble = move.includes('2');
+        
+        this.rotateFace(face, isPrime, isDouble);
+        
+        setTimeout(() => {
+          this.executeSequence(sequence);
+        }, 400);
+      }
+      
+      solve() {
+        if (this.isAnimating) return;
+        
+        const reverseSequence = this.moveHistory.slice().reverse().map(move => {
+          if (move.includes('2')) return move;
+          if (move.includes("'")) return move[0];
+          return move[0] + "'";
+        });
+        
+        this.moveHistory = [];
+        this.executeSequence(reverseSequence);
+      }
+      
+      reset() {
+        if (this.isAnimating) return;
+        
+        this.moveHistory = [];
+        this.totalMoves = 0;
+        
+        // Reset all cube positions and orientations
+        this.cubes.forEach((cube, index) => {
+          const x = Math.floor(index / 9) - 1;
+          const y = Math.floor((index % 9) / 3) - 1;
+          const z = (index % 3) - 1;
+          
+          cube.userData.gridX = x;
+          cube.userData.gridY = y;
+          cube.userData.gridZ = z;
+          
+          const cubeSize = 0.95;
+          const gap = 0.05;
+          cube.position.set(x * (cubeSize + gap), y * (cubeSize + gap), z * (cubeSize + gap));
+          cube.rotation.set(0, 0, 0);
+        });
+        
+        this.updateUI();
+      }
+      
+      updateUI() {
+        document.getElementById('moveCount').textContent = this.moveHistory.length;
+        document.getElementById('totalMoves').textContent = this.totalMoves;
+        document.getElementById('cubeState').textContent = this.moveHistory.length === 0 ? 'Solved' : 'Scrambled';
+        document.getElementById('status').textContent = this.isAnimating ? 'Animating...' : 'Ready';
+      }
+      
+      updateTimer() {
+        const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+        const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+        const seconds = (elapsed % 60).toString().padStart(2, '0');
+        document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+        
+        setTimeout(() => this.updateTimer(), 1000);
+      }
+      
+      setupEventListeners() {
         document.getElementById('scramble').addEventListener('click', () => this.scramble());
         document.getElementById('solve').addEventListener('click', () => this.solve());
         document.getElementById('reset').addEventListener('click', () => this.reset());
-
-        // Keyboard controls
+        
         document.addEventListener('keydown', (e) => {
+          if (this.isAnimating) return;
+          
           const key = e.key.toLowerCase();
-          const moves = { u: 'U', d: 'D', l: 'L', r: 'R', f: 'F', b: 'B' };
+          const isPrime = e.shiftKey;
+          const isDouble = e.key === '2';
           
-          if (moves[key]) {
-            const move = moves[key] + (e.shiftKey ? "'" : '');
-            this.executeMove(move);
+          switch (key) {
+            case 'u': this.rotateFace('U', isPrime, isDouble); break;
+            case 'd': this.rotateFace('D', isPrime, isDouble); break;
+            case 'l': this.rotateFace('L', isPrime, isDouble); break;
+            case 'r': this.rotateFace('R', isPrime, isDouble); break;
+            case 'f': this.rotateFace('F', isPrime, isDouble); break;
+            case 'b': this.rotateFace('B', isPrime, isDouble); break;
           }
         });
-      }
-
-      executeMove(move, skipHistory = false) {
-        if (this.isAnimating) return;
         
-        if (!skipHistory) {
-          this.moveHistory.push(move);
-          this.updateStats();
-          if (!this.startTime) {
-            this.startTimer();
-          }
-        }
-
-        this.isAnimating = true;
-        const face = move[0];
-        const modifier = move.slice(1);
-        const rotations = modifier === '2' ? 2 : 1;
-        const clockwise = modifier !== "'";
-
-        this.rotateFace(face, clockwise, rotations, () => {
-          this.isAnimating = false;
-          this.checkSolved();
+        window.addEventListener('resize', () => {
+          const gameArea = document.getElementById('gameArea');
+          this.camera.aspect = gameArea.clientWidth / gameArea.clientHeight;
+          this.camera.updateProjectionMatrix();
+          this.renderer.setSize(gameArea.clientWidth, gameArea.clientHeight);
         });
       }
-
-      rotateFace(face, clockwise = true, rotations = 1, callback) {
-        const cubies = this.getCubiesForFace(face);
-        const group = new THREE.Group();
-        
-        cubies.forEach(cubie => {
-          this.cubeGroup.remove(cubie);
-          group.add(cubie);
-        });
-        
-        this.cubeGroup.add(group);
-
-        const axis = this.getRotationAxis(face);
-        const angle = (clockwise ? -Math.PI / 2 : Math.PI / 2) * rotations;
-        
-        const startQuaternion = group.quaternion.clone();
-        const endQuaternion = new THREE.Quaternion().setFromAxisAngle(axis, angle);
-        endQuaternion.multiply(startQuaternion);
-
-        let progress = 0;
-        const duration = 300; // ms
-        const startTime = Date.now();
-
-        const animateFace = () => {
-          const elapsed = Date.now() - startTime;
-          progress = Math.min(elapsed / duration, 1);
-          
-          // Smooth easing
-          const eased = 1 - Math.pow(1 - progress, 3);
-          
-          group.quaternion.slerpQuaternions(startQuaternion, endQuaternion, eased);
-
-          if (progress < 1) {
-            requestAnimationFrame(animateFace);
-          } else {
-            // Animation complete - apply final transform and clean up
-            cubies.forEach(cubie => {
-              group.remove(cubie);
-              cubie.position.applyQuaternion(endQuaternion);
-              cubie.quaternion.multiplyQuaternions(endQuaternion, cubie.quaternion);
-              this.cubeGroup.add(cubie);
-            });
-            
-            this.cubeGroup.remove(group);
-            callback();
-          }
-        };
-
-        animateFace();
-      }
-
-      getCubiesForFace(face) {
-        return this.cubies.filter(cubie => {
-          const pos = cubie.userData;
-          switch (face) {
-            case 'U': return pos.y === 2;
-            case 'D': return pos.y === 0;
-            case 'L': return pos.x === 0;
-            case 'R': return pos.x === 2;
-            case 'F': return pos.z === 2;
-            case 'B': return pos.z === 0;
-            default: return false;
-          }
-        });
-      }
-
-      getRotationAxis(face) {
-        switch (face) {
-          case 'U':
-          case 'D':
-            return new THREE.Vector3(0, 1, 0);
-          case 'L':
-          case 'R':
-            return new THREE.Vector3(1, 0, 0);
-          case 'F':
-          case 'B':
-            return new THREE.Vector3(0, 0, 1);
-          default:
-            return new THREE.Vector3(0, 1, 0);
-        }
-      }
-
-      scramble(moves = 25) {
-        const faces = ['U', 'D', 'L', 'R', 'F', 'B'];
-        const modifiers = ['', "'", '2'];
-        
-        this.reset();
-        
-        let delay = 0;
-        for (let i = 0; i < moves; i++) {
-          setTimeout(() => {
-            const face = faces[Math.floor(Math.random() * faces.length)];
-            const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-            this.executeMove(face + modifier);
-          }, delay);
-          delay += 100;
-        }
-      }
-
-      solve() {
-        if (this.moveHistory.length === 0) return;
-        
-        const inverseMoves = this.moveHistory.slice().reverse().map(move => {
-          if (move.endsWith('2')) return move;
-          if (move.endsWith("'")) return move[0];
-          return move + "'";
-        });
-
-        let delay = 0;
-        inverseMoves.forEach(move => {
-          setTimeout(() => {
-            this.executeMove(move, true);
-          }, delay);
-          delay += 150;
-        });
-
-        setTimeout(() => {
-          this.moveHistory = [];
-          this.updateStats();
-          this.stopTimer();
-        }, delay);
-      }
-
-      reset() {
-        this.moveHistory = [];
-        this.stopTimer();
-        this.updateStats();
-        
-        // Reset cube to solved state visually
-        this.cubies.forEach(cubie => {
-          const pos = cubie.userData;
-          cubie.position.set(
-            (pos.x - 1) * 1,
-            (pos.y - 1) * 1,
-            (pos.z - 1) * 1
-          );
-          cubie.quaternion.set(0, 0, 0, 1);
-        });
-      }
-
-      checkSolved() {
-        // Simple solved check - in a real implementation you'd check actual cube state
-        if (this.moveHistory.length === 0) {
-          document.getElementById('status').textContent = 'SOLVED!';
-          this.stopTimer();
-        } else {
-          document.getElementById('status').textContent = 'SOLVING';
-        }
-      }
-
-      startTimer() {
-        this.startTime = Date.now();
-        this.timer = setInterval(() => {
-          const elapsed = Date.now() - this.startTime;
-          const minutes = Math.floor(elapsed / 60000);
-          const seconds = Math.floor((elapsed % 60000) / 1000);
-          document.getElementById('time-display').textContent = 
-            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }, 100);
-      }
-
-      stopTimer() {
-        if (this.timer) {
-          clearInterval(this.timer);
-          this.timer = null;
-          this.startTime = null;
-        }
-      }
-
-      updateStats() {
-        document.getElementById('move-count').textContent = this.moveHistory.length;
-        document.getElementById('status').textContent = 
-          this.moveHistory.length === 0 ? 'READY' : 'SOLVING';
-      }
-
+      
       animate() {
         requestAnimationFrame(() => this.animate());
-        
-        // Subtle auto-rotation when not being manipulated
-        if (!this.isAnimating) {
-          this.cubeGroup.rotation.y += 0.002;
-        }
-        
         this.renderer.render(this.scene, this.camera);
       }
     }
-
+    
+    // Global function for button clicks
+    let cubeInstance;
+    
+    function rotateFace(face, isPrime = false, isDouble = false) {
+      if (cubeInstance) {
+        cubeInstance.rotateFace(face, isPrime, isDouble);
+      }
+    }
+    
     // Initialize when page loads
     window.addEventListener('load', () => {
-      new RubiksCube3D();
+      cubeInstance = new RubiksCube();
     });
   </script>
 </body>

@@ -90,6 +90,35 @@ Original lightweight version using pure CSS 3D transforms.
 3. Use **Solve** to automatically solve the cube
 4. Navigate the 3D view with arrow keys
 
+## 🏃 Cyber-Runner Pro (Enhanced Side-Scroller)
+A fast-paced, cyberpunk-themed side-scrolling game. Jump to avoid obstacles and survive as long as you can in a futuristic city.
+
+### Features:
+- **Animated Player Character:** A custom-drawn, animated sprite for the player.
+- **Dynamic Scrolling Background:** Multi-layered parallax background for a sense of depth and speed.
+- **Progressive Difficulty:** The game gets faster and more challenging over time.
+- **Particle Effects:** Trailing particles for the player and explosion effects on collision.
+- **Modern JavaScript:** Built with a clean, class-based structure and a proper game loop.
+
+### Controls:
+- **Jump:** Space bar or Arrow Up
+- **Start/Restart:** Enter
+
+## 🐾 Pixel Pet Pro (Virtual Pet Simulator)
+A virtual pet game where you care for a cute, digital creature. Keep it happy, fed, and energized to watch it thrive!
+
+### Features:
+- **Persistent State:** The game saves your pet's progress in your browser, so it lives on even when you're away.
+- **Expressive SVG Creature:** A large, expressive pet with a wide range of moods and faces, powered by SVG.
+- **Core Needs System:** Manage your pet's Hunger, Happiness, and Energy.
+- **Sleep/Wake Cycle:** Your pet gets tired and needs to sleep, adding a new layer of realism.
+- **Modern Codebase:** Built with a professional, class-based architecture and a state machine for robust behavior.
+
+### Controls:
+- **Feed:** Click the "Feed" button.
+- **Play:** Click the "Play" button.
+- **Sleep/Wake Up:** Click the "Sleep"/"Wake Up" button.
+
 ## 🚀 Live Demo
 Visit the live games at: [https://ncypher.github.io/tomfoolery/](https://ncypher.github.io/tomfoolery/)
 

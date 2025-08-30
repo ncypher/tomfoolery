@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBase Tamagotchi Deluxe</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        #tamagotchi-container {
+            background-color: #fff;
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px; /* Adjusted for better layout with SVG */
+        }
+        #pet-display {
+            width: 100px; /* SVG viewport width */
+            height: 100px; /* SVG viewport height */
+            margin: 20px auto;
+            border: 1px solid #eee; /* Optional: to see the boundary */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #pet-display svg {
+            width: 100%;
+            height: 100%;
+        }
+        .stats-container {
+            margin-bottom: 20px;
+        }
+        .stat {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .stat-bar-container {
+            width: 120px; /* Slightly wider for clarity */
+            height: 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 2px auto;
+            overflow: hidden;
+        }
+        .stat-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+        }
+        .buttons-container button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .buttons-container button:hover {
+            background-color: #357abd;
+        }
+        .buttons-container button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #message-area {
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+            height: 20px; /* Fixed height */
+        }
+        #game-over-message {
+            color: red;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="tamagotchi-container">
+        <h2>My QuickBase Pet</h2>
+        <div id="pet-display">
+            </div>
+        <div class="stats-container">
+            <div class="stat">Age: <span id="age">0</span></div>
+            <div class="stat">
+                Hunger: <span id="hunger-value">50</span>/100
+                <div class="stat-bar-container"><div id="hunger-bar" class="stat-bar" style="width: 50%;"></div></div>
+            </div>
+            <div class="stat">
+                Happiness: <span id="happiness-value">50</span>/100
+                <div class="stat-bar-container"><div id="happiness-bar" class="stat-bar" style="width: 50%;"></div></div>
+            </div>
+            <div class="stat">
+                Energy: <span id="energy-value">50</span>/100
+                <div class="stat-bar-container"><div id="energy-bar" class="stat-bar" style="width: 50%;"></div></div>
+            </div>
+        </div>
+        <div class="buttons-container">
+            <button id="feed-button">Feed</button>
+            <button id="play-button">Play</button>
+            <button id="sleep-button">Sleep</button>
+        </div>
+        <div id="message-area"></div>
+        <div id="game-over-message" style="display: none;">Game Over!</div>
+        <button id="restart-button" style="display: none; margin-top: 10px;">Restart</button>
+    </div>
+
+    <script>
+        const petDisplay = document.getElementById('pet-display');
+        const ageDisplay = document.getElementById('age');
+        const hungerDisplay = document.getElementById('hunger-value');
+        const hungerBar = document.getElementById('hunger-bar');
+        const happinessDisplay = document.getElementById('happiness-value');
+        const happinessBar = document.getElementById('happiness-bar');
+        const energyDisplay = document.getElementById('energy-value');
+        const energyBar = document.getElementById('energy-bar');
+        const messageArea = document.getElementById('message-area');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const restartButton = document.getElementById('restart-button');
+
+        const feedButton = document.getElementById('feed-button');
+        const playButton = document.getElementById('play-button');
+        const sleepButton = document.getElementById('sleep-button');
+
+        let tamagotchi = {
+            name: "Pebble",
+            age: 0,
+            hunger: 50,
+            happiness: 50,
+            energy: 50,
+            isSleeping: false,
+            isAlive: true,
+            maxStat: 100,
+            minStat: 0
+        };
+
+        // --- SVG Face Definitions ---
+        function getFaceSVG(state) {
+            const eyeColor = "#333";
+            const mouthColor = "#333";
+            const faceColor = tamagotchi.isSleeping ? "#cceeff" : "#FFFDE7"; // Light blue when sleeping
+
+            let eyesSVG = `<circle cx="30" cy="40" r="8" fill="${eyeColor}" /><circle cx="70" cy="40" r="8" fill="${eyeColor}" />`; // Default eyes
+            let mouthSVG = `<path d="M 30 70 Q 50 80 70 70" stroke="${mouthColor}" stroke-width="3" fill="none" />`; // Default smile
+
+            switch (state) {
+                case "happy":
+                    // Default is happy
+                    break;
+                case "veryHappy":
+                    eyesSVG = `<path d="M 20 40 Q 30 30 40 40" stroke="${eyeColor}" stroke-width="3" fill="none" />
+                               <path d="M 60 40 Q 70 30 80 40" stroke="${eyeColor}" stroke-width="3" fill="none" />`; // ^_^ eyes
+                    mouthSVG = `<path d="M 25 65 Q 50 85 75 65" stroke="${mouthColor}" stroke-width="3" fill="none" />`; // Bigger smile
+                    break;
+                case "sad":
+                    eyesSVG = `<circle cx="30" cy="40" r="7" fill="${eyeColor}" /><circle cx="70" cy="40" r="7" fill="${eyeColor}" />
+                               <path d="M 25 48 Q 30 45 35 48" stroke="#55AADD" stroke-width="2" fill="none" />`; // Little tear drop (optional)
+                    mouthSVG = `<path d="M 30 80 Q 50 70 70 80" stroke="${mouthColor}" stroke-width="3" fill="none" />`; // Frown
+                    break;
+                case "hungry":
+                    eyesSVG = `<ellipse cx="30" cy="40" rx="8" ry="10" fill="${eyeColor}" /><ellipse cx="70" cy="40" rx="8" ry="10" fill="${eyeColor}" />`; // Wider eyes
+                    mouthSVG = `<ellipse cx="50" cy="75" rx="15" ry="8" stroke="${mouthColor}" stroke-width="2" fill="#ffeecc" />`; // Open mouth
+                    break;
+                case "tired":
+                    eyesSVG = `<rect x="20" y="38" width="20" height="4" fill="${eyeColor}" rx="2"/><rect x="60" y="38" width="20" height="4" fill="${eyeColor}" rx="2"/>`; // Slit eyes -_-
+                    mouthSVG = `<line x1="30" y1="75" x2="70" y2="75" stroke="${mouthColor}" stroke-width="3" />`; // Flat mouth
+                    break;
+                case "sleeping":
+                    eyesSVG = `<path d="M 20 40 Q 30 50 40 40" stroke="${eyeColor}" stroke-width="3" fill="none" />
+                               <path d="M 60 40 Q 70 50 80 40" stroke="${eyeColor}" stroke-width="3" fill="none" />`; // Closed curved eyes
+                    mouthSVG = `<line x1="40" y1="75" x2="60" y2="75" stroke="${mouthColor}" stroke-width="2" />`; // Small flat mouth
+                    // Add Zzz's
+                    return `
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0" y="0" width="100" height="100" fill="${faceColor}" rx="10"/>
+                            ${eyesSVG}
+                            ${mouthSVG}
+                            <text x="60" y="30" font-family="Arial" font-size="12" fill="${eyeColor}">Z</text>
+                            <text x="65" y="22" font-family="Arial" font-size="10" fill="${eyeColor}">z</text>
+                            <text x="70" y="16" font-family="Arial" font-size="8" fill="${eyeColor}">z</text>
+                        </svg>`;
+                case "dead":
+                    eyesSVG = `<line x1="20" y1="30" x2="40" y2="50" stroke="${eyeColor}" stroke-width="4" />
+                               <line x1="40" y1="30" x2="20" y2="50" stroke="${eyeColor}" stroke-width="4" />
+                               <line x1="60" y1="30" x2="80" y2="50" stroke="${eyeColor}" stroke-width="4" />
+                               <line x1="80" y1="30" x2="60" y2="50" stroke="${eyeColor}" stroke-width="4" />`; // X X eyes
+                    mouthSVG = `<line x1="30" y1="75" x2="70" y2="75" stroke="${mouthColor}" stroke-width="3" />`; // Flat mouth
+                    break;
+                default: // Neutral
+                    break;
+            }
+
+            return `
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="100" height="100" fill="${faceColor}" rx="10"/> ${eyesSVG}
+                    ${mouthSVG}
+                </svg>`;
+        }
+
+
+        function updateDisplay() {
+            ageDisplay.textContent = tamagotchi.age;
+
+            hungerDisplay.textContent = tamagotchi.hunger;
+            const hungerPercent = 100 - (tamagotchi.hunger / tamagotchi.maxStat * 100);
+            hungerBar.style.width = `${hungerPercent}%`;
+            hungerBar.style.backgroundColor = tamagotchi.hunger > 70 ? '#e74c3c' : (tamagotchi.hunger > 40 ? '#f39c12' : '#2ecc71');
+
+
+            happinessDisplay.textContent = tamagotchi.happiness;
+            const happinessPercent = (tamagotchi.happiness / tamagotchi.maxStat * 100);
+            happinessBar.style.width = `${happinessPercent}%`;
+            happinessBar.style.backgroundColor = tamagotchi.happiness < 30 ? '#e74c3c' : (tamagotchi.happiness < 60 ? '#f39c12' : '#2ecc71');
+
+            energyDisplay.textContent = tamagotchi.energy;
+            const energyPercent = (tamagotchi.energy / tamagotchi.maxStat * 100);
+            energyBar.style.width = `${energyPercent}%`;
+            energyBar.style.backgroundColor = tamagotchi.energy < 30 ? '#e74c3c' : (tamagotchi.energy < 60 ? '#f39c12' : '#2ecc71');
+
+            let faceState = "happy"; // Default
+            if (!tamagotchi.isAlive) {
+                faceState = "dead";
+                gameOverMessage.style.display = 'block';
+                restartButton.style.display = 'inline-block';
+                disableButtons(true);
+            } else if (tamagotchi.isSleeping) {
+                faceState = "sleeping";
+            } else if (tamagotchi.hunger > 80) {
+                faceState = "hungry";
+            } else if (tamagotchi.happiness < 20) {
+                faceState = "sad";
+            } else if (tamagotchi.energy < 20 && tamagotchi.happiness > 20) { // Check happiness to not override extreme sadness
+                faceState = "tired";
+            } else if (tamagotchi.happiness > 80) {
+                faceState = "veryHappy";
+            }
+            petDisplay.innerHTML = getFaceSVG(faceState);
+        }
+
+        function showMessage(msg, duration = 2000) {
+            messageArea.textContent = msg;
+            setTimeout(() => {
+                if (messageArea.textContent === msg) {
+                    messageArea.textContent = "";
+                }
+            }, duration);
+        }
+
+        function disableButtons(disabled) {
+            feedButton.disabled = disabled;
+            playButton.disabled = disabled;
+            // Sleep button is handled specially if it's to wake up
+            sleepButton.disabled = (disabled && !tamagotchi.isSleeping);
+        }
+
+        feedButton.addEventListener('click', () => {
+            if (!tamagotchi.isAlive || tamagotchi.isSleeping) return;
+            if (tamagotchi.hunger <= tamagotchi.minStat) {
+                showMessage(`${tamagotchi.name} is already full!`);
+                tamagotchi.happiness = Math.max(tamagotchi.minStat, tamagotchi.happiness - 10); // Overfeeding
+            } else {
+                tamagotchi.hunger = Math.max(tamagotchi.minStat, tamagotchi.hunger - 25);
+                showMessage(`You fed ${tamagotchi.name}. Yum!`);
+            }
+            tamagotchi.happiness = Math.min(tamagotchi.maxStat, tamagotchi.happiness + 5);
+            updateDisplay();
+        });
+
+        playButton.addEventListener('click', () => {
+            if (!tamagotchi.isAlive || tamagotchi.isSleeping) return;
+            if (tamagotchi.energy < 20) {
+                showMessage(`${tamagotchi.name} is too tired to play.`);
+                tamagotchi.happiness = Math.max(tamagotchi.minStat, tamagotchi.happiness - 10);
+            } else {
+                tamagotchi.happiness = Math.min(tamagotchi.maxStat, tamagotchi.happiness + 20);
+                tamagotchi.energy = Math.max(tamagotchi.minStat, tamagotchi.energy - 15);
+                showMessage(`You played with ${tamagotchi.name}! Fun!`);
+            }
+            updateDisplay();
+        });
+
+        sleepButton.addEventListener('click', () => {
+            if (!tamagotchi.isAlive) return;
+            if (tamagotchi.isSleeping) {
+                tamagotchi.isSleeping = false;
+                sleepButton.textContent = "Sleep";
+                disableButtons(false);
+                showMessage(`${tamagotchi.name} woke up!`);
+            } else {
+                if (tamagotchi.energy >= tamagotchi.maxStat) {
+                    showMessage(`${tamagotchi.name} isn't tired!`);
+                    return;
+                }
+                tamagotchi.isSleeping = true;
+                sleepButton.textContent = "Wake Up";
+                disableButtons(true); // Disable others
+                sleepButton.disabled = false; // Ensure wake up button is enabled
+                showMessage(`${tamagotchi.name} is now sleeping...`);
+            }
+            updateDisplay();
+        });
+
+        restartButton.addEventListener('click', () => {
+            initGame();
+        });
+
+        function gameLoop() {
+            if (!tamagotchi.isAlive) {
+                clearInterval(mainGameLoop);
+                clearInterval(agingLoop);
+                return;
+            }
+
+            if (tamagotchi.isSleeping) {
+                tamagotchi.energy = Math.min(tamagotchi.maxStat, tamagotchi.energy + 2); // Faster energy regen while sleeping
+                tamagotchi.hunger = Math.min(tamagotchi.maxStat, tamagotchi.hunger + 0.3);
+                tamagotchi.happiness = Math.max(tamagotchi.minStat, tamagotchi.happiness - 0.1); // Slight happiness decrease if sleeping too long unwantedly
+            } else {
+                tamagotchi.hunger = Math.min(tamagotchi.maxStat, tamagotchi.hunger + 1);
+                tamagotchi.happiness = Math.max(tamagotchi.minStat, tamagotchi.happiness - 1);
+                tamagotchi.energy = Math.max(tamagotchi.minStat, tamagotchi.energy - 0.5);
+            }
+
+            // Cap stats
+            tamagotchi.hunger = parseFloat(Math.max(tamagotchi.minStat, Math.min(tamagotchi.maxStat, tamagotchi.hunger)).toFixed(1));
+            tamagotchi.happiness = parseFloat(Math.max(tamagotchi.minStat, Math.min(tamagotchi.maxStat, tamagotchi.happiness)).toFixed(1));
+            tamagotchi.energy = parseFloat(Math.max(tamagotchi.minStat, Math.min(tamagotchi.maxStat, tamagotchi.energy)).toFixed(1));
+
+            checkGameOver();
+            updateDisplay();
+        }
+
+        function agePet() {
+            if (!tamagotchi.isAlive) return;
+            tamagotchi.age++;
+            // updateDisplay(); // gameLoop already calls updateDisplay
+        }
+
+        function checkGameOver() {
+            if (tamagotchi.hunger >= tamagotchi.maxStat || tamagotchi.happiness <= tamagotchi.minStat || (tamagotchi.energy <= tamagotchi.minStat && !tamagotchi.isSleeping)) {
+                if (tamagotchi.hunger >= tamagotchi.maxStat) showMessage(`${tamagotchi.name} starved... Oh no!`, 5000);
+                else if (tamagotchi.happiness <= tamagotchi.minStat) showMessage(`${tamagotchi.name} became overwhelmingly sad...`, 5000);
+                else if (tamagotchi.energy <= tamagotchi.minStat && !tamagotchi.isSleeping) showMessage(`${tamagotchi.name} collapsed from complete exhaustion...`, 5000);
+
+                tamagotchi.isAlive = false;
+                // updateDisplay(); // Called in gameLoop
+            }
+        }
+        
+        let mainGameLoop;
+        let agingLoop;
+
+        function initGame() {
+            tamagotchi = {
+                name: "Pebble",
+                age: 0,
+                hunger: 50,
+                happiness: 50,
+                energy: 50,
+                isSleeping: false,
+                isAlive: true,
+                maxStat: 100,
+                minStat: 0
+            };
+            messageArea.textContent = "";
+            gameOverMessage.style.display = 'none';
+            restartButton.style.display = 'none';
+            sleepButton.textContent = "Sleep";
+            disableButtons(false);
+            updateDisplay(); // Initial display with SVG face
+
+            if (mainGameLoop) clearInterval(mainGameLoop);
+            if (agingLoop) clearInterval(agingLoop);
+
+            mainGameLoop = setInterval(gameLoop, 1500);
+            agingLoop = setInterval(agePet, 10000); // Increased aging interval a bit
+        }
+
+        // Initial setup
+        initGame();
+    </script>
+</body>
+</html>

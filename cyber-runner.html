@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber-Runner Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            background: #0a0a0a;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 25px #0f0, 0 0 10px white inset;
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="1000" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // --- Game Constants ---
+        const PLAYER_WIDTH = 40;
+        const PLAYER_HEIGHT = 60;
+        const GRAVITY = 0.7;
+        const JUMP_FORCE = -18;
+
+        let score = 0;
+        let gameSpeed = 5;
+        let gameState = 'START'; // START, PLAYING, GAME_OVER
+
+        // --- Sprite Generation ---
+        function createPlayerSprite() {
+            const spriteCanvas = document.createElement('canvas');
+            const spriteCtx = spriteCanvas.getContext('2d');
+            const spriteWidth = PLAYER_WIDTH;
+            const spriteHeight = PLAYER_HEIGHT;
+            const frameCount = 5; // 4 run frames, 1 jump frame
+            spriteCanvas.width = spriteWidth * frameCount;
+            spriteCanvas.height = spriteHeight;
+
+            spriteCtx.strokeStyle = '#0f0';
+            spriteCtx.lineWidth = 4;
+            spriteCtx.lineCap = 'round';
+
+            // Draw 4 running frames
+            for (let i = 0; i < 4; i++) {
+                const x = spriteWidth * i + spriteWidth / 2;
+                const y = 10;
+                // Head
+                spriteCtx.strokeRect(x - 10, y, 20, 20);
+                // Body
+                spriteCtx.beginPath();
+                spriteCtx.moveTo(x, y + 20);
+                spriteCtx.lineTo(x, y + 40);
+                spriteCtx.stroke();
+                
+                // Legs & Arms based on frame
+                const angle = (i % 2 === 0) ? 0.4 : -0.4;
+                // Legs
+                spriteCtx.beginPath();
+                spriteCtx.moveTo(x, y + 40);
+                spriteCtx.lineTo(x - 15 * Math.cos(angle), y + 40 + 15 * Math.sin(Math.abs(angle)));
+                spriteCtx.stroke();
+                spriteCtx.beginPath();
+                spriteCtx.moveTo(x, y + 40);
+                spriteCtx.lineTo(x + 15 * Math.cos(angle), y + 40 + 15 * Math.sin(Math.abs(angle)));
+                spriteCtx.stroke();
+                // Arms
+                spriteCtx.beginPath();
+                spriteCtx.moveTo(x, y + 25);
+                spriteCtx.lineTo(x - 10, y + 25 + 10 * Math.sin(-angle * 2));
+                spriteCtx.stroke();
+                 spriteCtx.beginPath();
+                spriteCtx.moveTo(x, y + 25);
+                spriteCtx.lineTo(x + 10, y + 25 + 10 * Math.sin(angle * 2));
+                spriteCtx.stroke();
+            }
+            
+            // Draw jumping frame (frame 4)
+            const x = spriteWidth * 4 + spriteWidth / 2;
+            const y = 10;
+            // Head
+            spriteCtx.strokeRect(x - 10, y, 20, 20);
+            // Body
+            spriteCtx.beginPath();
+            spriteCtx.moveTo(x, y + 20);
+            spriteCtx.lineTo(x, y + 40);
+            spriteCtx.stroke();
+            // Legs
+            spriteCtx.beginPath();
+            spriteCtx.moveTo(x, y + 40);
+            spriteCtx.lineTo(x - 10, y + 55);
+            spriteCtx.stroke();
+            spriteCtx.beginPath();
+            spriteCtx.moveTo(x, y + 40);
+            spriteCtx.lineTo(x + 10, y + 55);
+            spriteCtx.stroke();
+            // Arms
+            spriteCtx.beginPath();
+            spriteCtx.moveTo(x, y + 25);
+            spriteCtx.lineTo(x - 15, y + 20);
+            spriteCtx.stroke();
+            spriteCtx.beginPath();
+            spriteCtx.moveTo(x, y + 25);
+            spriteCtx.lineTo(x + 15, y + 20);
+            spriteCtx.stroke();
+
+
+            const img = new Image();
+            img.src = spriteCanvas.toDataURL();
+            return img;
+        }
+
+        const playerSprite = createPlayerSprite();
+
+        // --- Player ---
+        class Player {
+            constructor() {
+                this.x = 150;
+                this.y = canvas.height - PLAYER_HEIGHT;
+                this.width = PLAYER_WIDTH;
+                this.height = PLAYER_HEIGHT;
+                this.velocityY = 0;
+                this.isJumping = false;
+                this.particles = [];
+                
+                // Animation
+                this.sprite = playerSprite;
+                this.spriteWidth = PLAYER_WIDTH;
+                this.spriteHeight = PLAYER_HEIGHT;
+                this.frame = 0;
+                this.animationTimer = 0;
+                this.animationSpeed = 5; // change frame every 5 game ticks
+            }
+
+            draw() {
+                let currentFrame = this.frame;
+                if (this.isJumping) {
+                    currentFrame = 4; // The jump frame
+                }
+
+                ctx.shadowColor = '#0f0';
+                ctx.shadowBlur = 20;
+                ctx.drawImage(
+                    this.sprite, 
+                    currentFrame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight,
+                    this.x - 10, this.y, this.width + 20, this.height
+                );
+                ctx.shadowBlur = 0;
+            }
+
+            update() {
+                // Animate player
+                if (!this.isJumping) {
+                    this.animationTimer++;
+                    if (this.animationTimer % this.animationSpeed === 0) {
+                        this.frame = (this.frame + 1) % 4; // 4 running frames
+                    }
+                }
+
+                // Apply gravity
+                this.velocityY += GRAVITY;
+                this.y += this.velocityY;
+
+                // Ground check
+                if (this.y > canvas.height - this.height) {
+                    this.y = canvas.height - this.height;
+                    this.velocityY = 0;
+                    this.isJumping = false;
+                }
+                
+                // Trail particles
+                if(gameState === 'PLAYING') {
+                    this.particles.push(new Particle(this.x + this.width / 2, this.y + this.height, '#0f0', -2));
+                }
+                this.particles.forEach((p, i) => {
+                    p.update();
+                    if (p.isFinished()) this.particles.splice(i, 1);
+                });
+            }
+
+            jump() {
+                if (!this.isJumping) {
+                    this.velocityY = JUMP_FORCE;
+                    this.isJumping = true;
+                }
+            }
+            
+            drawParticles() {
+                this.particles.forEach(p => p.draw());
+            }
+        }
+
+        // --- Obstacles ---
+        class Obstacle {
+            constructor() {
+                this.width = 20 + Math.random() * 40;
+                this.height = 30 + Math.random() * 80;
+                this.x = canvas.width;
+                this.y = canvas.height - this.height;
+            }
+
+            draw() {
+                ctx.fillStyle = '#f00';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                
+                ctx.shadowColor = '#f00';
+                ctx.shadowBlur = 15;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.shadowBlur = 0;
+            }
+
+            update() {
+                this.x -= gameSpeed;
+            }
+        }
+        
+        let obstacles = [];
+        let obstacleTimer = 0;
+        let randomObstacleInterval = Math.random() * 50 + 80;
+
+        function handleObstacles() {
+            if (obstacleTimer > randomObstacleInterval) {
+                obstacles.push(new Obstacle());
+                randomObstacleInterval = Math.random() * 50 + 80 - (gameSpeed * 5);
+                obstacleTimer = 0;
+            } else {
+                obstacleTimer++;
+            }
+
+            obstacles.forEach((o, i) => {
+                o.update();
+                o.draw();
+                if (o.x + o.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            });
+        }
+
+        // --- Particles ---
+        class Particle {
+            constructor(x, y, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = Math.random() * 5 + 2;
+                this.speed = speed;
+                this.life = 1;
+                this.vx = Math.random() * 2 - 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.speed;
+                this.life -= 0.05;
+            }
+            
+            draw() {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+                ctx.globalAlpha = 1;
+            }
+
+            isFinished() {
+                return this.life <= 0;
+            }
+        }
+        let explosionParticles = [];
+
+        // --- Background ---
+        class Layer {
+            constructor(image, speedModifier) {
+                this.x = 0;
+                this.y = 0;
+                this.width = canvas.width;
+                this.height = canvas.height;
+                this.image = image;
+                this.speedModifier = speedModifier;
+            }
+            update() {
+                this.x -= gameSpeed * this.speedModifier;
+                if (this.x <= -this.width) {
+                    this.x = 0;
+                }
+            }
+            draw() {
+                ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+            }
+        }
+        
+        // Create background images programmatically
+        function createCityscapeLayer(color, speed) {
+            const layerCanvas = document.createElement('canvas');
+            layerCanvas.width = canvas.width;
+            layerCanvas.height = canvas.height;
+            const layerCtx = layerCanvas.getContext('2d');
+            
+            layerCtx.fillStyle = color;
+            for (let i = 0; i < 30; i++) {
+                const x = Math.random() * canvas.width;
+                const h = Math.random() * 150 + 50;
+                const w = Math.random() * 30 + 10;
+                layerCtx.fillRect(x, canvas.height - h, w, h);
+            }
+            const img = new Image();
+            img.src = layerCanvas.toDataURL();
+            return new Layer(img, speed);
+        }
+
+        const layer1 = createCityscapeLayer('rgba(15, 80, 150, 0.4)', 0.2);
+        const layer2 = createCityscapeLayer('rgba(25, 100, 180, 0.6)', 0.4);
+        const layer3 = createCityscapeLayer('rgba(45, 120, 220, 0.8)', 0.6);
+        const backgroundLayers = [layer1, layer2, layer3];
+
+        // --- Game Logic ---
+        const player = new Player();
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            backgroundLayers.forEach(l => {
+                l.update();
+                l.draw();
+            });
+            
+            player.drawParticles();
+
+            if (gameState === 'PLAYING') {
+                gameSpeed += 0.003;
+                score++;
+                
+                player.update();
+                player.draw();
+                
+                handleObstacles();
+                checkCollisions();
+
+                drawUI();
+
+            } else if (gameState === 'START') {
+                drawStartScreen();
+                 player.draw(); // Draw player on start screen
+            } else if (gameState === 'GAME_OVER') {
+                obstacles.forEach(o => o.draw());
+                player.draw();
+                explosionParticles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if(p.isFinished()) explosionParticles.splice(i, 1);
+                });
+                drawGameOverScreen();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        function checkCollisions() {
+            for (let i = 0; i < obstacles.length; i++) {
+                if (
+                    player.x < obstacles[i].x + obstacles[i].width &&
+                    player.x + player.width > obstacles[i].x &&
+                    player.y < obstacles[i].y + obstacles[i].height &&
+                    player.y + player.height > obstacles[i].y
+                ) {
+                    gameState = 'GAME_OVER';
+                    for(let j = 0; j < 50; j++) {
+                        explosionParticles.push(new Particle(player.x + player.width/2, player.y + player.height/2, '#f00', Math.random() * 10 - 5));
+                    }
+                }
+            }
+        }
+        
+        function resetGame() {
+            player.y = canvas.height - PLAYER_HEIGHT;
+            player.velocityY = 0;
+            player.isJumping = false;
+            obstacles.length = 0;
+            score = 0;
+            gameSpeed = 5;
+            gameState = 'PLAYING';
+        }
+
+        // --- UI ---
+        function drawUI() {
+            ctx.fillStyle = '#fff';
+            ctx.font = '30px Orbitron';
+            ctx.shadowColor = '#0f0';
+            ctx.shadowBlur = 10;
+            ctx.fillText('Score: ' + Math.floor(score / 10), 20, 40);
+            ctx.shadowBlur = 0;
+        }
+
+        function drawStartScreen() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = '70px Orbitron';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = '#0f0';
+            ctx.shadowBlur = 20;
+            ctx.fillText('Cyber-Runner Pro', canvas.width / 2, canvas.height / 2 - 50);
+            
+            ctx.font = '30px Orbitron';
+            ctx.fillText('Press ENTER to Start', canvas.width / 2, canvas.height / 2 + 20);
+            ctx.shadowBlur = 0;
+            ctx.textAlign = 'left';
+        }
+
+        function drawGameOverScreen() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#f00';
+            ctx.font = '80px Orbitron';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = '#f00';
+            ctx.shadowBlur = 20;
+            ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 60);
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = '40px Orbitron';
+            ctx.fillText('Score: ' + Math.floor(score / 10), canvas.width / 2, canvas.height / 2 + 20);
+            
+            ctx.font = '30px Orbitron';
+            ctx.fillText('Press ENTER to Restart', canvas.width / 2, canvas.height / 2 + 80);
+            ctx.shadowBlur = 0;
+            ctx.textAlign = 'left';
+        }
+
+        // --- Input ---
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                if(gameState === 'PLAYING') player.jump();
+            }
+            if (e.code === 'Enter') {
+                if (gameState === 'START' || gameState === 'GAME_OVER') {
+                    resetGame();
+                }
+            }
+        });
+
+        animate();
+    </script>
+</body>
+</html>

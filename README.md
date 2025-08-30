@@ -2,10 +2,6 @@
 
 A collection of fun, coded games for entertainment and experimentation!
 
-# 🎮 Tomfoolery Games
-
-A collection of fun, coded games for entertainment and experimentation!
-
 ## � Space Invaders Pro (Retro Arcade Enhanced)
 Classic space combat with modern JavaScript and cyberpunk aesthetics.
 

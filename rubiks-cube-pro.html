@@ -186,6 +186,7 @@
         this.animationQueue = [];
         this.moveHistory = [];
         this.totalMoves = 0;
+        this.suppressMoveRecording = false;
         this.startTime = Date.now();
         
         this.init();
@@ -354,6 +355,7 @@
       processQueue() {
         if (this.animationQueue.length === 0) {
           this.isAnimating = false;
+          this.updateUI();
           return;
         }
         
@@ -502,69 +504,20 @@
       }
       
       updateCubeStatesAfterRotation(cubeIndices, face, clockwise) {
+        const rotationAngle = clockwise ? Math.PI/2 : -Math.PI/2;
+        const rotationMatrix = this.getRotationMatrix(face, rotationAngle);
+        const cubeSize = 0.95;
+        const gap = 0.05;
+
         cubeIndices.forEach(index => {
           const state = this.cubeStates[index];
           if (!state) return;
           
-          const { gridX, gridY, gridZ } = state;
-          let newX = gridX, newY = gridY, newZ = gridZ;
-          
-          switch (face) {
-            case 'U':
-              if (clockwise) {
-                newX = -gridZ;
-                newZ = gridX;
-              } else {
-                newX = gridZ;
-                newZ = -gridX;
-              }
-              break;
-            case 'D':
-              if (clockwise) {
-                newX = gridZ;
-                newZ = -gridX;
-              } else {
-                newX = -gridZ;
-                newZ = gridX;
-              }
-              break;
-            case 'R':
-              if (clockwise) {
-                newY = -gridZ;
-                newZ = gridY;
-              } else {
-                newY = gridZ;
-                newZ = -gridY;
-              }
-              break;
-            case 'L':
-              if (clockwise) {
-                newY = gridZ;
-                newZ = -gridY;
-              } else {
-                newY = -gridZ;
-                newZ = gridY;
-              }
-              break;
-            case 'F':
-              if (clockwise) {
-                newX = gridY;
-                newY = -gridX;
-              } else {
-                newX = -gridY;
-                newY = gridX;
-              }
-              break;
-            case 'B':
-              if (clockwise) {
-                newX = -gridY;
-                newY = gridX;
-              } else {
-                newX = gridY;
-                newY = -gridX;
-              }
-              break;
-          }
+          const rotatedGrid = new THREE.Vector3(state.gridX, state.gridY, state.gridZ)
+            .applyMatrix4(rotationMatrix);
+          const newX = Math.round(rotatedGrid.x);
+          const newY = Math.round(rotatedGrid.y);
+          const newZ = Math.round(rotatedGrid.z);
           
           // Update cube state
           state.gridX = newX;
@@ -572,8 +525,6 @@
           state.gridZ = newZ;
           
           // Update cube position
-          const cubeSize = 0.95;
-          const gap = 0.05;
           const newPosition = new THREE.Vector3(
             newX * (cubeSize + gap),
             newY * (cubeSize + gap),
@@ -594,7 +545,9 @@
         if (isDouble) move += '2';
         else if (isPrime) move += "'";
         
-        this.moveHistory.push(move);
+        if (!this.suppressMoveRecording) {
+          this.moveHistory.push(move);
+        }
         this.totalMoves++;
       }
       
@@ -614,8 +567,11 @@
         this.executeSequence(scrambleSequence);
       }
       
-      executeSequence(sequence) {
-        if (sequence.length === 0) return;
+      executeSequence(sequence, onComplete = null) {
+        if (sequence.length === 0) {
+          if (onComplete) onComplete();
+          return;
+        }
         
         const move = sequence.shift();
         const face = move[0];
@@ -625,7 +581,7 @@
         this.rotateFace(face, isPrime, isDouble);
         
         setTimeout(() => {
-          this.executeSequence(sequence);
+          this.executeSequence(sequence, onComplete);
         }, 400);
       }
       
@@ -639,7 +595,12 @@
         });
         
         this.moveHistory = [];
-        this.executeSequence(reverseSequence);
+        this.suppressMoveRecording = true;
+        this.executeSequence(reverseSequence, () => {
+          this.suppressMoveRecording = false;
+          this.moveHistory = [];
+          this.updateUI();
+        });
       }
       
       reset() {

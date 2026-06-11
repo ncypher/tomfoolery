@@ -115,6 +115,22 @@ A virtual pet game where you care for a cute, digital creature. Keep it happy, f
 - **Play:** Click the "Play" button.
 - **Sleep/Wake Up:** Click the "Sleep"/"Wake Up" button.
 
+## 🌀 Mandelbrot Lab (Interactive Fractal Navigator)
+A vibe-coded fractal toy for exploring the Mandelbrot set through zooming, panning, palette shifts, and hotspot jumps.
+
+### Features:
+- **Canvas Fractal Renderer:** Pure JavaScript Mandelbrot rendering with adjustable quality and iteration depth.
+- **Interactive Navigation:** Click to zoom, mouse wheel for fine control, and drag to pan around the complex plane.
+- **Hotspot Bookmarks:** Jump straight into classic regions like Seahorse Valley, Triple Spiral, and Lightning Filament.
+- **Signal Hunt Progress:** A small mission loop tracks deep zoom milestones and changes the status as you explore.
+- **Palette Controls:** Switch between Nebula Candy, Circuit Glow, Solar Ember, and Blue Ice color ramps.
+
+### Controls:
+- **Zoom:** Click the canvas, use the Zoom buttons, or scroll the mouse wheel.
+- **Pan:** Drag the canvas.
+- **Tune Detail:** Adjust Iteration Depth and Render Quality sliders.
+- **Save Image:** Press S to download the current canvas as a PNG.
+
 ## 🚀 Live Demo
 Visit the live games at: [https://ncypher.github.io/tomfoolery/](https://ncypher.github.io/tomfoolery/)
 

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mandelbrot Lab - Tomfoolery Games</title>
+  <style>
+    :root {
+      --bg: #06080f;
+      --panel: rgba(11, 17, 30, 0.88);
+      --panel-strong: #0d1424;
+      --border: rgba(102, 252, 241, 0.22);
+      --text: #eff7ff;
+      --muted: #8fa8c7;
+      --cyan: #00ffd1;
+      --amber: #ffb86b;
+      --pink: #ff4fd8;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(0, 255, 209, 0.16), transparent 28rem),
+        radial-gradient(circle at 85% 30%, rgba(255, 79, 216, 0.12), transparent 24rem),
+        linear-gradient(135deg, #03050a, var(--bg) 52%, #0b1020);
+      color: var(--text);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0, 255, 209, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 209, 0.045) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    .shell {
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 4px 0 6px;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      text-shadow: 0 0 34px rgba(0, 255, 209, 0.24);
+    }
+
+    .tagline {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .home-link {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: rgba(6, 8, 15, 0.72);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .lab {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .viewport {
+      position: relative;
+      min-height: 640px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #01030a;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 640px;
+      cursor: crosshair;
+      image-rendering: pixelated;
+      touch-action: none;
+    }
+
+    .hud {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid rgba(102, 252, 241, 0.18);
+      border-radius: 12px;
+      background: rgba(3, 5, 10, 0.72);
+      backdrop-filter: blur(12px);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      overflow: hidden;
+      color: var(--cyan);
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 0.9rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    aside { display: grid; gap: 14px; }
+
+    .panel {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .control { display: grid; gap: 7px; margin-bottom: 14px; }
+
+    label {
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    input[type="range"] { width: 100%; accent-color: var(--cyan); }
+
+    select, button {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid rgba(102, 252, 241, 0.22);
+      border-radius: 11px;
+      background: var(--panel-strong);
+      color: var(--text);
+      font: inherit;
+      font-weight: 800;
+    }
+
+    button {
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0, 255, 209, 0.12);
+    }
+
+    .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .primary { background: linear-gradient(135deg, rgba(0, 255, 209, 0.2), rgba(74, 141, 255, 0.22)); }
+    .mission { display: grid; gap: 10px; color: var(--muted); font-size: 0.92rem; }
+    .mission strong { color: var(--amber); }
+
+    .progress {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--amber), var(--pink));
+      transition: width 180ms ease;
+    }
+
+    .bookmarks { display: grid; gap: 8px; }
+
+    .bookmark {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(102, 252, 241, 0.14);
+      border-radius: 12px;
+      background: rgba(6, 8, 15, 0.62);
+    }
+
+    .bookmark b { display: block; font-size: 0.9rem; }
+    .bookmark span { color: var(--muted); font-family: "Cascadia Mono", Consolas, monospace; font-size: 0.72rem; }
+    .bookmark button { width: auto; min-height: 34px; padding: 0 10px; }
+    .tip { color: var(--muted); font-size: 0.82rem; }
+
+    @media (max-width: 980px) {
+      header, .lab { grid-template-columns: 1fr; }
+      .home-link { justify-self: start; }
+      .viewport, canvas { min-height: 520px; }
+      .hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 560px) {
+      .shell { padding: 14px; }
+      .viewport, canvas { min-height: 440px; }
+      .hud { position: static; grid-template-columns: 1fr; padding: 12px; background: #02040a; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <div class="eyebrow">Tomfoolery Fractal Toy</div>
+        <h1>Mandelbrot Lab</h1>
+        <p class="tagline">Zoom into a tiny equation until it starts behaving like a universe.</p>
+      </div>
+      <a class="home-link" href="index.html">Back to games</a>
+    </header>
+
+    <main class="lab">
+      <section class="viewport" aria-label="Interactive Mandelbrot canvas">
+        <canvas id="fractal" width="960" height="640"></canvas>
+        <div class="hud" aria-live="polite">
+          <div class="stat"><span>Center X</span><strong id="centerX">-0.500000</strong></div>
+          <div class="stat"><span>Center Y</span><strong id="centerY">0.000000</strong></div>
+          <div class="stat"><span>Scale</span><strong id="scaleReadout">3.000000</strong></div>
+          <div class="stat"><span>Depth</span><strong id="depthReadout">220</strong></div>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel mission">
+          <h2>Signal Hunt</h2>
+          <div>Current find: <strong id="missionName">Seahorse Valley</strong></div>
+          <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+          <div id="missionText">Dive past 120x zoom and catch a filament-rich region.</div>
+        </section>
+
+        <section class="panel">
+          <h2>Controls</h2>
+          <div class="control">
+            <label for="iterations">Iteration Depth <span id="iterationValue">220</span></label>
+            <input id="iterations" type="range" min="80" max="900" step="20" value="220">
+          </div>
+          <div class="control">
+            <label for="quality">Render Quality</label>
+            <input id="quality" type="range" min="1" max="4" step="1" value="2">
+          </div>
+          <div class="control">
+            <label for="palette">Palette</label>
+            <select id="palette">
+              <option value="nebula">Nebula Candy</option>
+              <option value="circuit">Circuit Glow</option>
+              <option value="ember">Solar Ember</option>
+              <option value="ice">Blue Ice</option>
+            </select>
+          </div>
+          <div class="button-grid">
+            <button class="primary" id="zoomIn">Zoom In</button>
+            <button id="zoomOut">Zoom Out</button>
+            <button id="reset">Reset</button>
+            <button id="randomize">Random</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Hotspots</h2>
+          <div class="bookmarks" id="bookmarks"></div>
+        </section>
+
+        <section class="panel tip">Click the canvas to zoom, drag to pan, or use the wheel for fine navigation. Press <b>S</b> to save a PNG.</section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('fractal');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const centerXEl = document.getElementById('centerX');
+    const centerYEl = document.getElementById('centerY');
+    const scaleEl = document.getElementById('scaleReadout');
+    const depthEl = document.getElementById('depthReadout');
+    const iterationsEl = document.getElementById('iterations');
+    const iterationValueEl = document.getElementById('iterationValue');
+    const qualityEl = document.getElementById('quality');
+    const paletteEl = document.getElementById('palette');
+    const progressBar = document.getElementById('progressBar');
+    const missionName = document.getElementById('missionName');
+    const missionText = document.getElementById('missionText');
+    const bookmarksEl = document.getElementById('bookmarks');
+
+    const palettes = {
+      nebula: [[8, 12, 28], [0, 255, 209], [255, 79, 216], [255, 184, 107], [231, 255, 251]],
+      circuit: [[3, 8, 12], [0, 255, 140], [0, 255, 209], [126, 247, 255], [255, 255, 255]],
+      ember: [[15, 5, 2], [255, 69, 0], [255, 184, 61], [255, 247, 166], [255, 255, 255]],
+      ice: [[3, 10, 23], [54, 139, 255], [100, 218, 255], [208, 246, 255], [255, 255, 255]]
+    };
+
+    const bookmarks = [
+      { name: 'Seahorse Valley', x: -0.743643887, y: 0.131825904, scale: 0.008 },
+      { name: 'Elephant Valley', x: 0.275, y: 0.0, scale: 0.09 },
+      { name: 'Triple Spiral', x: -0.088, y: 0.654, scale: 0.045 },
+      { name: 'Lightning Filament', x: -1.25066, y: 0.02012, scale: 0.018 }
+    ];
+
+    const state = {
+      centerX: -0.55,
+      centerY: 0,
+      scale: 3.1,
+      iterations: Number(iterationsEl.value),
+      quality: Number(qualityEl.value),
+      palette: paletteEl.value,
+      dragging: false,
+      dragStart: null,
+      renderToken: 0
+    };
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(360, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(320, Math.floor(rect.height * dpr));
+      render();
+    }
+
+    function colorRamp(t) {
+      const stops = palettes[state.palette];
+      const position = Math.max(0, Math.min(0.999, t)) * (stops.length - 1);
+      const index = Math.floor(position);
+      const mix = position - index;
+      const a = stops[index];
+      const b = stops[index + 1];
+      return [
+        Math.round(a[0] + (b[0] - a[0]) * mix),
+        Math.round(a[1] + (b[1] - a[1]) * mix),
+        Math.round(a[2] + (b[2] - a[2]) * mix)
+      ];
+    }
+
+    function mandelbrot(cx, cy) {
+      let zx = 0;
+      let zy = 0;
+      let escapedAt = 0;
+
+      for (let i = 0; i < state.iterations; i += 1) {
+        const xx = zx * zx - zy * zy + cx;
+        zy = 2 * zx * zy + cy;
+        zx = xx;
+        const magnitude = zx * zx + zy * zy;
+        if (magnitude > 4) {
+          escapedAt = i + 1 - Math.log2(Math.log2(Math.sqrt(magnitude)));
+          break;
+        }
+      }
+
+      return escapedAt;
+    }
+
+    function render() {
+      const token = ++state.renderToken;
+      const step = state.quality;
+      const width = canvas.width;
+      const height = canvas.height;
+      const image = ctx.createImageData(width, height);
+      const aspect = width / height;
+      const viewWidth = state.scale * aspect;
+      const viewHeight = state.scale;
+      const pixels = image.data;
+
+      for (let y = 0; y < height; y += step) {
+        if (token !== state.renderToken) return;
+        const cy = state.centerY + ((y / height) - 0.5) * viewHeight;
+        for (let x = 0; x < width; x += step) {
+          const cx = state.centerX + ((x / width) - 0.5) * viewWidth;
+          const escaped = mandelbrot(cx, cy);
+          const color = escaped === 0 ? [2, 4, 10] : colorRamp((escaped / state.iterations) ** 0.42);
+
+          for (let yy = 0; yy < step; yy += 1) {
+            for (let xx = 0; xx < step; xx += 1) {
+              const px = x + xx;
+              const py = y + yy;
+              if (px >= width || py >= height) continue;
+              const offset = (py * width + px) * 4;
+              pixels[offset] = color[0];
+              pixels[offset + 1] = color[1];
+              pixels[offset + 2] = color[2];
+              pixels[offset + 3] = 255;
+            }
+          }
+        }
+      }
+
+      ctx.putImageData(image, 0, 0);
+      updateReadouts();
+    }
+
+    function updateReadouts() {
+      centerXEl.textContent = state.centerX.toFixed(8);
+      centerYEl.textContent = state.centerY.toFixed(8);
+      scaleEl.textContent = state.scale.toExponential(3);
+      depthEl.textContent = String(state.iterations);
+      iterationValueEl.textContent = String(state.iterations);
+      const zoom = 3.1 / state.scale;
+      const progress = Math.min(100, Math.log10(Math.max(1, zoom)) * 36);
+      progressBar.style.width = `${progress}%`;
+      if (zoom > 3000) {
+        missionName.textContent = 'Deep Signal';
+        missionText.textContent = 'That is properly buried in the math. Screenshot-worthy.';
+      } else if (zoom > 120) {
+        missionName.textContent = 'Filament Hunter';
+        missionText.textContent = 'You are inside the lace. Keep chasing structure.';
+      } else {
+        missionName.textContent = 'Seahorse Valley';
+        missionText.textContent = 'Dive past 120x zoom and catch a filament-rich region.';
+      }
+    }
+
+    function canvasToComplex(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (clientX - rect.left) / rect.width;
+      const y = (clientY - rect.top) / rect.height;
+      const aspect = canvas.width / canvas.height;
+      return { x: state.centerX + (x - 0.5) * state.scale * aspect, y: state.centerY + (y - 0.5) * state.scale };
+    }
+
+    function zoomAt(clientX, clientY, factor) {
+      const before = canvasToComplex(clientX, clientY);
+      state.scale *= factor;
+      const after = canvasToComplex(clientX, clientY);
+      state.centerX += before.x - after.x;
+      state.centerY += before.y - after.y;
+      render();
+    }
+
+    function loadBookmark(bookmark) {
+      state.centerX = bookmark.x;
+      state.centerY = bookmark.y;
+      state.scale = bookmark.scale;
+      state.iterations = Math.max(state.iterations, 360);
+      iterationsEl.value = String(state.iterations);
+      render();
+    }
+
+    bookmarks.forEach((bookmark) => {
+      const item = document.createElement('div');
+      item.className = 'bookmark';
+      item.innerHTML = `<div><b>${bookmark.name}</b><span>${bookmark.x.toFixed(5)}, ${bookmark.y.toFixed(5)}</span></div>`;
+      const button = document.createElement('button');
+      button.textContent = 'Jump';
+      button.addEventListener('click', () => loadBookmark(bookmark));
+      item.appendChild(button);
+      bookmarksEl.appendChild(item);
+    });
+
+    canvas.addEventListener('click', (event) => { if (!state.dragging) zoomAt(event.clientX, event.clientY, 0.55); });
+    canvas.addEventListener('wheel', (event) => { event.preventDefault(); zoomAt(event.clientX, event.clientY, event.deltaY > 0 ? 1.2 : 0.82); }, { passive: false });
+    canvas.addEventListener('pointerdown', (event) => {
+      state.dragging = false;
+      state.dragStart = { x: event.clientX, y: event.clientY, centerX: state.centerX, centerY: state.centerY };
+      canvas.setPointerCapture(event.pointerId);
+    });
+    canvas.addEventListener('pointermove', (event) => {
+      if (!state.dragStart) return;
+      const dx = event.clientX - state.dragStart.x;
+      const dy = event.clientY - state.dragStart.y;
+      if (Math.abs(dx) + Math.abs(dy) < 5) return;
+      state.dragging = true;
+      const rect = canvas.getBoundingClientRect();
+      const aspect = canvas.width / canvas.height;
+      state.centerX = state.dragStart.centerX - (dx / rect.width) * state.scale * aspect;
+      state.centerY = state.dragStart.centerY - (dy / rect.height) * state.scale;
+      render();
+    });
+    canvas.addEventListener('pointerup', (event) => {
+      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+      state.dragStart = null;
+      setTimeout(() => { state.dragging = false; }, 0);
+    });
+    iterationsEl.addEventListener('input', () => { state.iterations = Number(iterationsEl.value); render(); });
+    qualityEl.addEventListener('input', () => { state.quality = Number(qualityEl.value); render(); });
+    paletteEl.addEventListener('change', () => { state.palette = paletteEl.value; render(); });
+    document.getElementById('zoomIn').addEventListener('click', () => { state.scale *= 0.55; render(); });
+    document.getElementById('zoomOut').addEventListener('click', () => { state.scale *= 1.8; render(); });
+    document.getElementById('reset').addEventListener('click', () => { state.centerX = -0.55; state.centerY = 0; state.scale = 3.1; render(); });
+    document.getElementById('randomize').addEventListener('click', () => {
+      const pick = bookmarks[Math.floor(Math.random() * bookmarks.length)];
+      loadBookmark({ ...pick, x: pick.x + (Math.random() - 0.5) * pick.scale, y: pick.y + (Math.random() - 0.5) * pick.scale, scale: pick.scale * (0.4 + Math.random() * 1.4) });
+    });
+    window.addEventListener('keydown', (event) => {
+      if (event.key.toLowerCase() === 's') {
+        const link = document.createElement('a');
+        link.download = 'mandelbrot-lab.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+    });
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  </script>
+</body>
+</html>

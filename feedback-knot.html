@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback Knot — Conversational Artifacts</title>
+  <style>
+    :root {
+      --bg:#071014; --panel:#0d171c; --line:#28434d; --text:#e8fbf7;
+      --muted:#9db7b3; --cyan:#35f2d0; --amber:#ffb86b; --rose:#ff7d9c;
+      --blue:#7cc7ff; --violet:#c7a0ff; --green:#90e39a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at 50% 0,#10232b 0,#071014 58%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+    .wrap{max-width:1180px;margin:auto;padding:28px}
+    header{display:flex;gap:20px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:22px}
+    .eyebrow{font:700 12px/1.2 ui-monospace,monospace;letter-spacing:.16em;color:var(--cyan)}
+    h1{font-size:clamp(2.3rem,7vw,5.4rem);line-height:.95;margin:.35rem 0 1rem;letter-spacing:-.055em}
+    .lede{max-width:760px;color:var(--muted);font-size:1.05rem}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    button{border:1px solid #31515b;background:#0b181e;color:var(--text);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700}
+    button:hover,button.active{border-color:var(--cyan);color:var(--cyan)}
+    .stage{position:relative;border:1px solid #1f3942;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,rgba(11,27,33,.88),rgba(6,15,19,.96));min-height:650px}
+    svg{width:100%;height:auto;display:block}
+    .node circle{fill:#0a1b21;stroke-width:2}
+    .node text{fill:var(--text);font:700 13px ui-monospace,monospace;text-anchor:middle;pointer-events:none}
+    .node .sub{fill:var(--muted);font-size:10px;font-weight:500}
+    .edge{fill:none;stroke:var(--line);stroke-width:2.2;opacity:.78}
+    .edge.active{stroke:var(--cyan);filter:url(#glow);opacity:1}
+    .packet{filter:url(#glow)}
+    .center-label{font:800 15px ui-monospace,monospace;fill:var(--amber);text-anchor:middle}
+    .status{position:absolute;left:20px;right:20px;bottom:18px;display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
+    .panel{background:rgba(5,15,19,.88);border:1px solid #24434c;border-radius:16px;padding:15px;backdrop-filter:blur(8px)}
+    .panel strong{color:var(--cyan)}
+    .log{font:12px/1.55 ui-monospace,monospace;color:#b7ccc8;max-height:112px;overflow:hidden}
+    .meter{display:grid;gap:10px}
+    .meter-row{display:grid;grid-template-columns:120px 1fr 42px;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
+    .track{height:8px;border-radius:99px;background:#173039;overflow:hidden}.fill{height:100%;background:var(--cyan);transition:width .4s ease}
+    .note{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .note article{border-top:1px solid #28424a;padding-top:12px;color:var(--muted)}
+    .note h2{color:var(--text);font-size:1rem;margin:.1rem 0 .45rem}
+    @media(max-width:760px){.status{position:static;margin:14px;grid-template-columns:1fr}.stage{min-height:auto}.note{grid-template-columns:1fr}.meter-row{grid-template-columns:96px 1fr 34px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">CONVERSATIONAL ARTIFACT 002</div>
+      <h1>Feedback Knot</h1>
+      <p class="lede">Development rarely moves in a clean line. Intent, implementation, critique, evidence, constraints, and human judgment loop around one another—sometimes productively, sometimes like spaghetti with credentials.</p>
+    </div>
+    <div class="controls" aria-label="Simulation controls">
+      <button id="run" class="active">Run system</button>
+      <button id="conflict">Inject conflict</button>
+      <button id="noise">Add ambiguity</button>
+      <button id="reset">Reset</button>
+    </div>
+  </header>
+
+  <section class="stage">
+    <svg viewBox="0 0 1100 650" role="img" aria-label="Animated non-linear feedback system with human intent, agents, constraints, runtime evidence, disagreement, and acceptance">
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <path id="p1" d="M550 325 C420 220 305 180 190 220 S170 410 330 420 S500 520 550 325"/>
+        <path id="p2" d="M550 325 C680 210 810 170 915 235 S930 430 760 430 S610 520 550 325"/>
+        <path id="p3" d="M190 220 C360 70 720 80 915 235"/>
+        <path id="p4" d="M330 420 C500 600 680 590 760 430"/>
+        <path id="p5" d="M330 420 C410 250 690 250 760 430"/>
+        <path id="p6" d="M190 220 C360 360 760 360 915 235"/>
+      </defs>
+
+      <g id="edges">
+        <use href="#p1" class="edge active"/><use href="#p2" class="edge active"/>
+        <use href="#p3" class="edge"/><use href="#p4" class="edge"/>
+        <use href="#p5" class="edge active"/><use href="#p6" class="edge"/>
+      </g>
+
+      <g class="node" transform="translate(550 325)">
+        <circle r="78" stroke="var(--amber)"/><circle r="48" stroke="var(--cyan)" opacity=".45"/>
+        <text y="-7">HUMAN</text><text class="sub" y="13">purpose · limits · acceptance</text>
+      </g>
+      <g class="node" transform="translate(190 220)"><circle r="62" stroke="var(--violet)"/><text y="-5">INTENT</text><text class="sub" y="14">question · desire · analogy</text></g>
+      <g class="node" transform="translate(330 420)"><circle r="62" stroke="var(--blue)"/><text y="-5">PROPOSAL</text><text class="sub" y="14">architecture · options</text></g>
+      <g class="node" transform="translate(915 235)"><circle r="62" stroke="var(--green)"/><text y="-5">RUNTIME</text><text class="sub" y="14">what actually happened</text></g>
+      <g class="node" transform="translate(760 430)"><circle r="62" stroke="var(--rose)"/><text y="-5">REVIEW</text><text class="sub" y="14">critique · dissent · appeal</text></g>
+      <g class="node" transform="translate(550 115)"><circle r="52" stroke="var(--amber)"/><text y="-5">CONSTRAINTS</text><text class="sub" y="14">safety · scope · reality</text></g>
+      <g class="node" transform="translate(550 565)"><circle r="52" stroke="var(--cyan)"/><text y="-5">ARTIFACT</text><text class="sub" y="14">accepted for now</text></g>
+
+      <g id="packets"></g>
+    </svg>
+
+    <div class="status">
+      <div class="panel">
+        <strong>Live deliberation</strong>
+        <div id="log" class="log" aria-live="polite"></div>
+      </div>
+      <div class="panel meter">
+        <div class="meter-row"><span>Coherence</span><div class="track"><div id="coherence" class="fill" style="width:72%"></div></div><b id="cVal">72</b></div>
+        <div class="meter-row"><span>Dissent</span><div class="track"><div id="dissent" class="fill" style="width:28%"></div></div><b id="dVal">28</b></div>
+        <div class="meter-row"><span>Evidence</span><div class="track"><div id="evidence" class="fill" style="width:44%"></div></div><b id="eVal">44</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="note">
+    <article><h2>A working observation</h2>This is not a claim to have mastered cybernetics. It is a field note from someone learning by building feedback systems and watching where authority, evidence, and correction actually move.</article>
+    <article><h2>No clean handoff</h2>Intent changes after implementation. Constraints appear late. Tests contradict reviewers. Reviewers challenge tests. The artifact is accepted provisionally, not declared perfect.</article>
+    <article><h2>Disagreement has a job</h2>Dissent is useful when it remains visible, evidence-bearing, and reversible. The goal is not unanimous agents. The goal is a system capable of correcting itself.</article>
+  </section>
+</div>
+<script>
+  const paths=['#p1','#p2','#p3','#p4','#p5','#p6'];
+  const colors=['var(--cyan)','var(--amber)','var(--rose)','var(--blue)','var(--green)','var(--violet)'];
+  const log=document.getElementById('log');
+  let running=true, timers=[];
+  let metrics={c:72,d:28,e:44};
+  const messages=[
+    'Intent reframed after implementation exposed a hidden assumption.',
+    'Proposal split into two competing approaches.',
+    'Runtime evidence contradicted the strongest review.',
+    'Minority report preserved for another cycle.',
+    'Constraint discovered late; architecture reopened.',
+    'Human conductor accepted a reversible version, not a final truth.',
+    'Reviewer challenged the test; test design sent back for appeal.'
+  ];
+  function say(text){const line=document.createElement('div');line.textContent='› '+text;log.prepend(line);while(log.children.length>6)log.lastChild.remove();}
+  function packet(){if(!running)return;const svg=document.querySelector('svg');const g=document.getElementById('packets');const use=paths[Math.floor(Math.random()*paths.length)];const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r',Math.random()>0.7?6:4);c.setAttribute('fill',colors[Math.floor(Math.random()*colors.length)]);c.setAttribute('class','packet');const a=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');a.setAttribute('dur',(2.4+Math.random()*2.7)+'s');a.setAttribute('repeatCount','1');const m=document.createElementNS('http://www.w3.org/2000/svg','mpath');m.setAttribute('href',use);a.appendChild(m);c.appendChild(a);g.appendChild(c);setTimeout(()=>c.remove(),5600)}
+  function update(){
+    metrics.c=Math.max(18,Math.min(96,metrics.c+(Math.random()*10-5)));
+    metrics.d=Math.max(6,Math.min(90,metrics.d+(Math.random()*12-5)));
+    metrics.e=Math.max(12,Math.min(99,metrics.e+(Math.random()*13-3)));
+    [['coherence','cVal','c'],['dissent','dVal','d'],['evidence','eVal','e']].forEach(([bar,val,key])=>{document.getElementById(bar).style.width=metrics[key]+'%';document.getElementById(val).textContent=Math.round(metrics[key])});
+  }
+  function start(){running=true;document.getElementById('run').textContent='Pause system';document.getElementById('run').classList.add('active');timers.push(setInterval(packet,520),setInterval(()=>say(messages[Math.floor(Math.random()*messages.length)]),2100),setInterval(update,1600));}
+  function stop(){running=false;timers.forEach(clearInterval);timers=[];document.getElementById('run').textContent='Run system';document.getElementById('run').classList.remove('active');}
+  document.getElementById('run').addEventListener('click',()=>running?stop():start());
+  document.getElementById('conflict').addEventListener('click',()=>{metrics.d=Math.min(95,metrics.d+28);metrics.c=Math.max(12,metrics.c-14);say('Conflict injected: executive implementation and judicial review now disagree.');update();for(let i=0;i<8;i++)setTimeout(packet,i*110)});
+  document.getElementById('noise').addEventListener('click',()=>{metrics.e=Math.max(8,metrics.e-20);metrics.d=Math.min(95,metrics.d+12);say('Ambiguity added: agents report confidence without shared evidence.');update()});
+  document.getElementById('reset').addEventListener('click',()=>{metrics={c:72,d:28,e:44};log.innerHTML='';say('System reset. No conclusion is permanent; every acceptance remains revisable.');update()});
+  start();say('System online. Multiple interpretations are moving at once.');
+</script>
+</body>
+</html>

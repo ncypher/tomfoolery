@@ -22,13 +22,23 @@ The interesting question stopped being **“Which model is best?”** and became
 
 Software increasingly begins as conversation. Source code is no longer always the first formal representation of an idea; it is often the compiled form of an extended dialogue.
 
-A loose observation can pass through several translations:
+The process is rarely as tidy as a straight line. A loose observation may become a proposal, collide with implementation, return through critique, be contradicted by runtime evidence, and reopen the original intent.
 
-> intuition → conversation → clarified idea → system design → software
+> intuition ⇄ conversation ⇄ proposal ⇄ implementation ⇄ review ⇄ evidence ⇄ revised intent
 
 This is not code-free development. Code still matters, and reality still gets the final vote. It is a conversational bridge between human intention, AI systems, formal languages, and runtime behavior.
 
 [Read the philosophy](artifacts/philosophy.md) · [See the workflow](artifacts/workflow.md) · [Follow the timeline](artifacts/timeline.md) · [Open the code journal](journal/README.md)
+
+## A working relationship with cybernetics
+
+I am new to cybernetics as a formal tradition, but not to the patterns it describes.
+
+I arrived through practice: building systems with feedback, watching authority move between people and tools, separating generation from review, preserving disagreement, and learning that a system becomes more trustworthy when it can notice and correct its own errors.
+
+I do not present this collection as settled theory or expertise. It is closer to an **R&D notebook for applied cybernetics**—an immersive learner documenting what becomes visible when feedback, adaptation, evidence, and human judgment are treated as parts of the software itself.
+
+That is the stance of this project: curious, provisional, testable, and willing to revise its own language.
 
 ## Live collection
 
@@ -36,12 +46,14 @@ Explore the browser artifacts at **[ncypher.github.io/tomfoolery](https://ncyphe
 
 | Artifact | What it explores | Status |
 |---|---|---|
-| [Space Invaders Pro](https://ncypher.github.io/tomfoolery/space-invaders-pro.html) | Game loops, particle systems, browser rendering, progression, and iterative refinement | Active experiment |
-| [3D Rubik’s Cube Pro](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) | Three.js, spatial interaction, lighting, camera systems, and interface design | Active experiment |
+| [AI Orchestra](https://ncypher.github.io/tomfoolery/ai-orchestra.html) | Specialized model roles, review loops, human direction, and runtime evidence | New artifact |
+| [Feedback Knot](https://ncypher.github.io/tomfoolery/feedback-knot.html) | Non-linear development, dissent, appeals, conflicting evidence, and provisional acceptance | New artifact |
+| [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Mathematical visualization, canvas rendering, navigation, and emergent structure | Active experiment |
+| [Space Invaders Pro](https://ncypher.github.io/tomfoolery/space-invaders-pro.html) | Game loops, particle systems, browser rendering, progression, and iterative refinement | Early experiment |
+| [3D Rubik’s Cube Pro](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) | Three.js, spatial interaction, lighting, camera systems, and interface design | Early experiment |
 | [3D Rubik’s Cube](https://ncypher.github.io/tomfoolery/rubiks-cube.html) | CSS 3D transforms and lightweight spatial interaction | Early experiment |
-| [Snake Pro](https://ncypher.github.io/tomfoolery/snake-pro.html) | State management, animation timing, responsive controls, and browser persistence | Active experiment |
-| [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html) | Side-scrolling mechanics, procedural obstacles, animation, and pacing | Active experiment |
-| [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Mathematical visualization, canvas rendering, navigation, and interactive exploration | Active experiment |
+| [Snake Pro](https://ncypher.github.io/tomfoolery/snake-pro.html) | State management, animation timing, responsive controls, and browser persistence | Early experiment |
+| [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html) | Side-scrolling mechanics, procedural obstacles, animation, and pacing | Early experiment |
 | [Pixel Pet](https://ncypher.github.io/tomfoolery/pixel-pet.html) | Persistent state, SVG expression, and lightweight simulation | Archived / currently non-functional |
 
 ## Why preserve imperfect work?
@@ -52,7 +64,7 @@ These projects preserve part of that path.
 
 Some are polished. Some remain unfinished. A few may be broken. They remain here because the collection is not only a portfolio of results; it is a record of questions, methods, limitations, and changing tools.
 
-The applications themselves matter, but the workflow they document matters more: human intent moving through natural language, multiple AI systems, traditional programming languages, and finally into something interactive.
+The early games now sit beside newer interactive thought experiments. That contrast is part of the record. The visible shift—from asking models to generate browser toys toward designing feedback systems that can critique, disagree, appeal, and revise—shows how both the tools and my own questions have changed.
 
 ## The living code journal
 
@@ -77,11 +89,11 @@ The journal is not an obligation to produce. It is an invitation to wonder:
 - What idea refused to leave me alone?
 - What would make a beautiful artifact?
 
-## Next artifacts
+## What comes next
 
-The next phase moves beyond browser games toward interactive thought experiments involving cybernetics, feedback, emergence, distributed intelligence, environmental sensing, and multi-model collaboration.
+The next pieces will explore cybernetics as something to experience rather than simply define: feedback that arrives late, agents that disagree honestly, systems that oscillate or stabilize, distributed environmental sensing, emergent behavior, and orchestration that looks less like a pipeline and more like a pit crew working around a machine already in motion.
 
-The first planned piece is **AI Orchestra**: a visual explanation of how one human can direct several models through generation, criticism, refinement, testing, and feedback without granting any single agent complete authority.
+There may also need to be a **Vibe-Coded Spaghetti Monster**—part cautionary tale, part patron saint of patched-together prototypes—because development is sometimes elegant orchestration and sometimes a glorious knot of noodles that somehow passes the tests.
 
 ---
 

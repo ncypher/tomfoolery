@@ -1,150 +1,90 @@
-# 🎮 Tomfoolery Games
+# Conversational Artifacts
 
-A collection of fun, coded games for entertainment and experimentation!
+> **Collecting thoughts that wanted to become software.**
 
-## � Space Invaders Pro (Retro Arcade Enhanced)
-Classic space combat with modern JavaScript and cyberpunk aesthetics.
+*A living code journal documenting the evolution of natural-language software development.*
 
-### Features:
-- **Neon Cyberpunk Design**: Glowing elements, particle effects, and retro-futuristic styling
-- **Advanced Game Mechanics**: 
-  - Multiple enemy types with different behaviors
-  - Progressive difficulty levels
-  - Lives system and high score tracking
-  - Dynamic enemy AI and shooting patterns
-- **Enhanced Audio**: Procedural sound effects using Web Audio API
-- **Visual Effects**: 
-  - Particle explosions on enemy destruction
-  - Animated starfield background
-  - Smooth bullet trails and glow effects
-  - Screen shake and flash effects
-- **Professional Polish**: Class-based architecture, game state management, and responsive controls
+Before AI-assisted development became an everyday part of software engineering, I began using small browser applications as a laboratory for a different way of building software.
 
-### Controls:
-- **Movement**: Arrow keys or A/D
-- **Fire**: Space bar
-- **Pause**: P key  
-- **Reset**: R key
+I was not trying to become a game developer. I was trying to understand what happened when natural language became part of the programming process.
 
-## �🐍 Snake Pro (Enhanced)
-Modern Snake game with professional graphics and smooth gameplay mechanics.
+Rather than working exclusively inside JavaScript, HTML, CSS, SVG, Canvas, or WebGL, I spent much of my time describing systems in English—how they should behave, respond, and feel—and allowing AI systems to translate those ideas into working software. My role gradually shifted from authoring every implementation detail to directing, evaluating, testing, and refining.
 
-### Features:
-- **Enhanced Graphics**: Smooth animations, particle effects, and modern styling
-- **Professional UI**: Beautiful dark theme with glowing elements and gradients
-- **Advanced Game Options**:
-  - Wrap-around walls (torus mode)
-  - Backtrack prevention
-  - Visual trail effects
-  - Particle effects on food consumption
-- **Smooth Gameplay**: Progressive speed increases and responsive controls
-- **High Score System**: Persistent high score tracking
-- **Responsive Design**: Works great on desktop and mobile devices
+Some experiments began with one carefully constructed description. Others developed through many conversations and moved between multiple models and tools. GPT, Claude, Gemini, Grok, browser environments, local editors, and VS Code integrations each offered different strengths. One might generate an implementation, another find a structural weakness, and another help cross a stubborn debugging gap.
 
-### Controls:
-- **Movement**: WASD keys or Arrow keys
-- **Pause/Resume**: Space bar or P key
-- **Restart**: R key
-- **Options**: Toggle various visual and gameplay settings
+The workflow became less like asking one assistant for code and more like conducting an ensemble.
 
-## 🚀 3D Rubik's Cube Pro (Three.js Enhanced)
-The ultimate 3D Rubik's Cube experience built with Three.js for realistic rendering and smooth gameplay.
+The interesting question stopped being **“Which model is best?”** and became **“How do different models complement one another?”**
 
-### Features:
-- **Realistic 3D Graphics**: Three.js WebGL rendering with proper lighting and shadows
-- **Smooth Animations**: Buttery-smooth face rotations with easing
-- **Intuitive Controls**: 
-  - Drag to rotate the entire cube view
-  - Mouse wheel to zoom in/out
-  - Click-and-drag face rotations
-  - Keyboard shortcuts (U, D, L, R, F, B + Shift for prime)
-- **Professional UI**: Modern control panel with statistics tracking
-- **Advanced Features**:
-  - Move counter and timer
-  - Auto-solve algorithm
-  - Smart scrambling
-  - Real-time status updates
+## Programming as exploratory conversation
 
-## 🧊 3D Rubik's Cube (Classic CSS)
-Original lightweight version using pure CSS 3D transforms.
+**Programming is becoming a form of exploratory conversation.**
 
-### Features:
-- **3D Visualization**: CSS 3D transforms create a realistic cube experience
-- **Interactive Controls**: 
-  - Arrow keys to orbit the cube
-  - Face rotation buttons (U, D, L, R, F, B)
-  - Keyboard shortcuts for moves
-- **Game Functions**:
-  - 🔀 Scramble the cube
-  - ✅ Auto-solve feature
-  - ♻️ Reset to solved state
-- **Move History**: Track your solving progress
+Software increasingly begins as conversation. Source code is no longer always the first formal representation of an idea; it is often the compiled form of an extended dialogue.
 
-### How to Play:
-1. Use the **Scramble** button to mix up the cube
-2. Rotate faces using the letter buttons or keyboard keys
-3. Use **Solve** to automatically solve the cube
-4. Navigate the 3D view with arrow keys
+A loose observation can pass through several translations:
 
-## 🏃 Cyber-Runner Pro (Enhanced Side-Scroller)
-A fast-paced, cyberpunk-themed side-scrolling game. Jump to avoid obstacles and survive as long as you can in a futuristic city.
+> intuition → conversation → clarified idea → system design → software
 
-### Features:
-- **Animated Player Character:** A custom-drawn, animated sprite for the player.
-- **Dynamic Scrolling Background:** Multi-layered parallax background for a sense of depth and speed.
-- **Progressive Difficulty:** The game gets faster and more challenging over time.
-- **Particle Effects:** Trailing particles for the player and explosion effects on collision.
-- **Modern JavaScript:** Built with a clean, class-based structure and a proper game loop.
+This is not code-free development. Code still matters, and reality still gets the final vote. It is a conversational bridge between human intention, AI systems, formal languages, and runtime behavior.
 
-### Controls:
-- **Jump:** Space bar or Arrow Up
-- **Start/Restart:** Enter
+[Read the philosophy](artifacts/philosophy.md) · [See the workflow](artifacts/workflow.md) · [Follow the timeline](artifacts/timeline.md) · [Open the code journal](journal/README.md)
 
-## 🐾 Pixel Pet Pro (Virtual Pet Simulator)
-A virtual pet game where you care for a cute, digital creature. Keep it happy, fed, and energized to watch it thrive!
+## Live collection
 
-### Features:
-- **Persistent State:** The game saves your pet's progress in your browser, so it lives on even when you're away.
-- **Expressive SVG Creature:** A large, expressive pet with a wide range of moods and faces, powered by SVG.
-- **Core Needs System:** Manage your pet's Hunger, Happiness, and Energy.
-- **Sleep/Wake Cycle:** Your pet gets tired and needs to sleep, adding a new layer of realism.
-- **Modern Codebase:** Built with a professional, class-based architecture and a state machine for robust behavior.
+Explore the browser artifacts at **[ncypher.github.io/tomfoolery](https://ncypher.github.io/tomfoolery/)**.
 
-### Controls:
-- **Feed:** Click the "Feed" button.
-- **Play:** Click the "Play" button.
-- **Sleep/Wake Up:** Click the "Sleep"/"Wake Up" button.
+| Artifact | What it explores | Status |
+|---|---|---|
+| [Space Invaders Pro](https://ncypher.github.io/tomfoolery/space-invaders-pro.html) | Game loops, particle systems, browser rendering, progression, and iterative refinement | Active experiment |
+| [3D Rubik’s Cube Pro](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) | Three.js, spatial interaction, lighting, camera systems, and interface design | Active experiment |
+| [3D Rubik’s Cube](https://ncypher.github.io/tomfoolery/rubiks-cube.html) | CSS 3D transforms and lightweight spatial interaction | Early experiment |
+| [Snake Pro](https://ncypher.github.io/tomfoolery/snake-pro.html) | State management, animation timing, responsive controls, and browser persistence | Active experiment |
+| [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html) | Side-scrolling mechanics, procedural obstacles, animation, and pacing | Active experiment |
+| [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Mathematical visualization, canvas rendering, navigation, and interactive exploration | Active experiment |
+| [Pixel Pet](https://ncypher.github.io/tomfoolery/pixel-pet.html) | Persistent state, SVG expression, and lightweight simulation | Archived / currently non-functional |
 
-## 🌀 Mandelbrot Lab (Interactive Fractal Navigator)
-A vibe-coded fractal toy for exploring the Mandelbrot set through zooming, panning, palette shifts, and hotspot jumps.
+## Why preserve imperfect work?
 
-### Features:
-- **Canvas Fractal Renderer:** Pure JavaScript Mandelbrot rendering with adjustable quality and iteration depth.
-- **Interactive Navigation:** Click to zoom, mouse wheel for fine control, and drag to pan around the complex plane.
-- **Hotspot Bookmarks:** Jump straight into classic regions like Seahorse Valley, Triple Spiral, and Lightning Filament.
-- **Signal Hunt Progress:** A small mission loop tracks deep zoom milestones and changes the status as you explore.
-- **Palette Controls:** Switch between Nebula Candy, Circuit Glow, Solar Ember, and Blue Ice color ramps.
+Software usually preserves the finished product while losing the path that produced it.
 
-### Controls:
-- **Zoom:** Click the canvas, use the Zoom buttons, or scroll the mouse wheel.
-- **Pan:** Drag the canvas.
-- **Tune Detail:** Adjust Iteration Depth and Render Quality sliders.
-- **Save Image:** Press S to download the current canvas as a PNG.
+These projects preserve part of that path.
 
-## 🚀 Live Demo
-Visit the live games at: [https://ncypher.github.io/tomfoolery/](https://ncypher.github.io/tomfoolery/)
+Some are polished. Some remain unfinished. A few may be broken. They remain here because the collection is not only a portfolio of results; it is a record of questions, methods, limitations, and changing tools.
 
-## 🛠️ Technical Details
-- Pure HTML, CSS, and JavaScript
-- No external dependencies
-- CSS 3D transforms for realistic cube rendering
-- QuickBase-friendly design (works in embedded environments)
+The applications themselves matter, but the workflow they document matters more: human intent moving through natural language, multiple AI systems, traditional programming languages, and finally into something interactive.
 
-## 📝 License
-MIT License - Feel free to use and modify!
+## The living code journal
 
-## 🤝 Contributing
-This is a personal fun project, but suggestions and improvements are welcome!
+Future entries will often begin with three small parts:
+
+### A thought
+
+A question, observation, analogy, or fragment expressed in ordinary language.
+
+### A sketch
+
+A small SVG, diagram, animation, interface, or simulation that makes the thought visible.
+
+### An artifact
+
+A focused piece of software—often one idea, one HTML file, and a few minutes of exploration.
+
+The journal is not an obligation to produce. It is an invitation to wonder:
+
+- What surprised me this week?
+- What did an AI help me notice that I had not considered?
+- What idea refused to leave me alone?
+- What would make a beautiful artifact?
+
+## Next artifacts
+
+The next phase moves beyond browser games toward interactive thought experiments involving cybernetics, feedback, emergence, distributed intelligence, environmental sensing, and multi-model collaboration.
+
+The first planned piece is **AI Orchestra**: a visual explanation of how one human can direct several models through generation, criticism, refinement, testing, and feedback without granting any single agent complete authority.
 
 ---
-*Made with ❤️ for the joy of coding and gaming*
+
+> **Every artifact begins with language.**
+
+MIT licensed. Built for experimentation, reflection, and the joy of discovering what an idea can become.

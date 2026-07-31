@@ -1,27 +1,23 @@
-# Timeline
+---
+layout: null
+---
+<style>
+:root{--bg:#091019;--panel:#101a27;--border:#24374b;--text:#edf5ff;--muted:#9db0c5;--accent:#79d7ff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 18% 5%,rgba(121,215,255,.1),transparent 26%),var(--bg);color:var(--text);font:17px/1.72 Inter,system-ui,sans-serif}.shell{width:min(920px,calc(100% - 32px));margin:auto;padding:28px 0 72px}.nav{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:68px}.nav a{color:var(--muted);text-decoration:none}h1{font-size:clamp(3rem,8vw,6rem);line-height:.95;letter-spacing:-.06em;margin:0 0 20px}.kicker{color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.78rem}.intro{color:var(--muted);font-size:1.15rem}.timeline{margin-top:54px;border-left:1px solid var(--border);padding-left:30px}.era{position:relative;margin:0 0 48px}.era:before{content:"";position:absolute;width:11px;height:11px;border-radius:50%;background:var(--accent);left:-36px;top:9px;box-shadow:0 0 20px rgba(121,215,255,.7)}.era h2{margin:0 0 8px;font-size:1.75rem}.era p{color:var(--muted)}blockquote{border-left:2px solid var(--accent);padding-left:18px;margin:24px 0;color:var(--text);font-size:1.2rem}.links{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--border);padding-top:28px;margin-top:58px}.links a{border:1px solid var(--border);border-radius:16px;padding:18px;text-decoration:none;color:var(--text)}@media(max-width:700px){.links{grid-template-columns:1fr}}
+</style>
+<div class="shell">
+<nav class="nav"><a href="../index.html"><strong>Conversational Artifacts</strong></a><span><a href="philosophy.md">Philosophy</a> · <a href="workflow.md">Workflow</a> · <a href="../journal/">Journal</a></span></nav>
+<span class="kicker">Room 03 · Timeline</span>
+# A record of changing questions.
+<p class="intro">This is a living record rather than a polished origin story. Dates, conversations, screenshots, exports, commits, and remembered turning points can be added as the archive is revisited.</p>
 
-This is a living record rather than a complete history. Dates can be added or corrected as old conversations, commits, and screenshots are revisited.
+<div class="timeline">
+<div class="era"><h2>Early browser experiments</h2><p>Small games became a laboratory for natural-language-directed development. The objective was less game design than observation: how much behavior, interaction, and visual character could be described in English and translated into working browser software?</p><p>Space Invaders, Snake, Cyber Runner, Rubik's Cube, Pixel Pet, and Mandelbrot Lab now form the fossil layer—the visible remains of an earlier question.</p></div>
+<div class="era"><h2>From prompts to conversations</h2><p>The meaningful unit of work expanded beyond the isolated prompt. Ideas developed through revision, explanation, debugging, contradiction, and long-running context. The conversation became the first draft.</p></div>
+<div class="era"><h2>Multi-model practice</h2><p>Work began moving among ChatGPT, Claude, Gemini, NotebookLM, Grok, browser tools, image and music generators, local editors, and VS Code agents. One system generated while another criticized, organized sources, repaired structure, or crossed a debugging gap.</p><blockquote>The interesting question stopped being “Which model is best?” and became “How do these perspectives complement one another?”</blockquote></div>
+<div class="era"><h2>Working systems</h2><p>The same conversational habits moved into larger automation, integration, data, API, ServiceNow, Quickbase, accounting, warehouse, and field-operation systems. Testing, runtime evidence, users, and operational consequences became active participants in the dialogue.</p></div>
+<div class="era"><h2>Conversational Artifacts · 2026</h2><p>The collection began a deliberate transition from a game gallery into a living research notebook.</p><blockquote>Collecting thoughts that wanted to become software.</blockquote><p>AI Orchestra and Feedback Knot shifted the center of gravity toward interactive thought experiments about distributed judgment, dissent, verification, feedback, and provisional acceptance.</p></div>
+<div class="era"><h2>Still observing</h2><p>The next rooms explore cognitive ecology, the Vibe-Coded Spaghetti Monster, distributed watersheds, cybernetic gardens, agent federations, environmental nervous systems, and the history preserved inside apparently ugly complexity.</p></div>
+</div>
 
-## Early experiments
-
-Small browser games became a practical laboratory for natural-language-directed development. The objective was less about game development than model evaluation: how much behavior, visual design, and interaction could be described in English and translated into working browser software?
-
-Experiments from this period include Space Invaders, Snake, Cyber Runner, the Rubik's Cube projects, and Pixel Pet.
-
-## Multi-model orchestration
-
-The workflow expanded beyond a single assistant. Ideas and code moved between GPT, Claude, Gemini, Grok, browser tools, local editors, and VS Code integrations. One system could help another cross a difficult point; generated code could be criticized, simplified, repaired, or reframed elsewhere.
-
-The meaningful unit of work became the conversation and the review circle—not the isolated prompt.
-
-## From experiments to working systems
-
-The same conversational habits began supporting larger automation, data, API, workflow, and enterprise application projects. The early browser artifacts remained useful because they preserved the exploratory phase in a form that was easy to see and run.
-
-## Conversational Artifacts
-
-In 2026, the collection began a deliberate transition from a game gallery into a living code journal:
-
-> Collecting thoughts that wanted to become software.
-
-The next phase focuses on small visual explanations, cybernetic systems, feedback loops, distributed intelligence, natural-language programming, and other ideas that benefit from becoming interactive.
+<div class="links"><a href="workflow.md"><strong>← Workflow</strong><br>See the feedback knot.</a><a href="../journal/"><strong>Code Journal →</strong><br>Read the field-note format.</a><a href="../index.html#collection"><strong>Artifact Collection →</strong><br>Open the fossil layer.</a></div>
+</div>

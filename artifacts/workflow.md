@@ -1,50 +1,56 @@
-# Workflow
-
-## A conversational bridge
+---
+layout: null
+---
+<style>
+:root{--bg:#091019;--panel:#101a27;--border:#24374b;--text:#edf5ff;--muted:#9db0c5;--accent:#79d7ff;--accent2:#c98cff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 18% 6%,rgba(121,215,255,.1),transparent 25%),radial-gradient(circle at 86% 12%,rgba(201,140,255,.08),transparent 28%),var(--bg);color:var(--text);font:17px/1.7 Inter,system-ui,sans-serif}.shell{width:min(960px,calc(100% - 32px));margin:auto;padding:28px 0 72px}.nav{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:68px}.nav a{color:var(--muted);text-decoration:none}.nav a:hover{color:var(--text)}h1{font-size:clamp(3rem,8vw,6rem);line-height:.95;letter-spacing:-.06em;margin:0 0 24px}h2{font-size:clamp(1.8rem,4vw,3rem);letter-spacing:-.04em;margin-top:58px}p,li{color:var(--muted)}strong{color:var(--text)}.kicker{color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.78rem}.knot{white-space:pre;overflow:auto;border:1px solid var(--border);border-radius:22px;padding:28px;background:rgba(16,26,39,.72);color:var(--text);font:15px/1.55 ui-monospace,monospace}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:30px 0}.card{border:1px solid var(--border);border-radius:18px;padding:20px;background:rgba(16,26,39,.62)}.card span{color:var(--accent);font-size:.76rem;text-transform:uppercase;letter-spacing:.1em}.links{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--border);padding-top:28px;margin-top:58px}.links a{border:1px solid var(--border);border-radius:16px;padding:18px;text-decoration:none;color:var(--text)}@media(max-width:700px){.cards,.links{grid-template-columns:1fr}.knot{font-size:12px}}
+</style>
+<div class="shell">
+<nav class="nav"><a href="../index.html"><strong>Conversational Artifacts</strong></a><span><a href="philosophy.md">Philosophy</a> · <a href="timeline.md">Timeline</a> · <a href="../journal/">Journal</a></span></nav>
+<span class="kicker">Room 02 · Workflow</span>
+# Development is not a pipeline. It is a feedback knot.
 
 These projects often begin before there is a specification, architecture diagram, or code file. They begin with an observation that wants form.
 
-The working process is intentionally simple:
+<div class="knot">                         constraints
+                      ↙       ↓       ↘
+intuition ⇄ conversation ⇄ proposal ⇄ implementation
+     ↑           ↖          ↕          ↘
+     │              disagreement       runtime
+     │                 ↕                ↕
+     └── revised intent ⇄ review ⇄ evidence
+                 ↖          ↓          ↗
+                    human acceptance
+                         for now</div>
 
-1. **A thought**  
-   A question, image, analogy, frustration, or possibility expressed in ordinary language.
+The process is recursive, opportunistic, and sometimes gloriously messy. Requirements change after implementation reveals what the requirement actually meant. A critic can be wrong. A test can expose a hidden assumption. Runtime can overrule a room full of persuasive explanations.
 
-2. **A conversation**  
-   The thought is explored aloud. Assumptions surface. The idea gains boundaries, behavior, and purpose.
+## The working rhythm
 
-3. **A sketch**  
-   A small diagram, SVG, animation, interface, or simulation makes the idea visible.
+<div class="cards">
+<div class="card"><span>01 · Thought</span><br><strong>An observation wants form.</strong><br>A question, analogy, frustration, image, or possibility appears in ordinary language.</div>
+<div class="card"><span>02 · Conversation</span><br><strong>The idea discovers itself.</strong><br>Assumptions surface. Boundaries, behavior, relationships, and purpose become visible.</div>
+<div class="card"><span>03 · Sketch</span><br><strong>The thought becomes perceptible.</strong><br>An SVG, animation, interface, diagram, simulation, or rough implementation gives it shape.</div>
+<div class="card"><span>04 · Artifact</span><br><strong>The idea becomes executable.</strong><br>Often one central question, one self-contained page, and a few minutes of interaction.</div>
+<div class="card"><span>05 · Review circle</span><br><strong>Trust is distributed.</strong><br>Different people, agents, tests, and tools generate, criticize, compare, repair, or preserve dissent.</div>
+<div class="card"><span>06 · Field report</span><br><strong>Reality answers back.</strong><br>The browser, users, logs, tests, and consequences become the next prompt.</div>
+</div>
 
-4. **An artifact**  
-   The idea becomes a focused, self-contained piece of software—often one HTML file, one interaction, and one central question.
+## Roles, not ranks
 
-5. **A review circle**  
-   Multiple models or tools may generate, critique, simplify, test, or repair different layers. No single participant receives unquestioned authority.
+- **Human:** purpose, taste, boundaries, coherence, and final responsibility
+- **Proposer:** offers a direction or implementation
+- **Builder:** transforms intent into working behavior
+- **Critic:** finds gaps, unsupported assumptions, and edge cases
+- **Dissenting voice:** preserves an alternative when consensus may be premature
+- **Tests and runtime:** provide evidence that rhetoric cannot negotiate away
 
-6. **Reality**  
-   The browser, tests, and human observation decide whether the artifact actually works.
+Any role may challenge another. The builder may reveal that the specification is impossible. Runtime may invalidate the critic. A minority report may survive because the majority is confidently wrong.
 
-## The review circle
-
-A typical experiment may move through several roles:
-
-- **Human:** intent, taste, priorities, boundaries, and final judgment
-- **Generator:** proposes an implementation
-- **Critic:** looks for gaps, redundancy, edge cases, and unsupported claims
-- **Refiner:** simplifies structure or improves the experience
-- **Tests and runtime:** verify behavior against reality
-
-The goal is not maximum automation. It is a safer and more expressive collaboration in which responsibilities are distributed without surrendering human accountability.
+**Disagreement is not failure. It is information.**
 
 ## Small by design
 
-A conversational artifact should usually be:
+A conversational artifact should usually center on one idea, open easily, reveal its mechanism, and remain honest about unfinished edges. The collection is not a contest for complexity. It is a field notebook for ideas that became interactive.
 
-- centered on one idea
-- understandable in a few minutes
-- self-contained where practical
-- easy to open in a browser
-- honest about its unfinished edges
-- preserved with a short note about what prompted it
-
-The collection is not a contest for complexity. It is a field notebook for ideas that became interactive.
+<div class="links"><a href="philosophy.md"><strong>← Philosophy</strong><br>Why conversation matters.</a><a href="timeline.md"><strong>Timeline →</strong><br>How the practice evolved.</a><a href="../feedback-knot.html"><strong>Launch Feedback Knot →</strong><br>Experience the loop.</a></div>
+</div>

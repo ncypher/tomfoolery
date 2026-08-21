@@ -28,7 +28,7 @@ The process is rarely as tidy as a straight line. A loose observation may become
 
 This is not code-free development. Code still matters, and reality still gets the final vote. It is a conversational bridge between human intention, AI systems, formal languages, and runtime behavior.
 
-[Read the philosophy](artifacts/philosophy.md) · [See the workflow](artifacts/workflow.md) · [Follow the timeline](artifacts/timeline.md) · [Open the code journal](journal/README.md)
+[Read the philosophy](artifacts/philosophy.md) · [See the workflow](artifacts/workflow.md) · [Follow the timeline](artifacts/timeline.md) · [Open the code journal](journal/README.md) · [Read Repo Excavations](journal/2026/08-21-repo-excavations.md)
 
 ## A working relationship with cybernetics
 
@@ -46,8 +46,10 @@ Explore the browser artifacts at **[ncypher.github.io/tomfoolery](https://ncyphe
 
 | Artifact | What it explores | Status |
 |---|---|---|
+| [What the Wren Hears](https://ncypher.github.io/tomfoolery/what-the-wren-hears.html) | LoRa chirp spread spectrum, cyclic symbol shifts, spreading factors, noise, and receiver intuition | New interactive signal lab |
 | [AI Orchestra](https://ncypher.github.io/tomfoolery/ai-orchestra.html) | Specialized model roles, review loops, human direction, and runtime evidence | New artifact |
 | [Feedback Knot](https://ncypher.github.io/tomfoolery/feedback-knot.html) | Non-linear development, dissent, appeals, conflicting evidence, and provisional acceptance | New artifact |
+| [Repo Excavations](journal/2026/08-21-repo-excavations.md) | Failures that became rules, decoy realities, software fossils, empty rooms, and repository archaeology | Living field notes |
 | [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Mathematical visualization, canvas rendering, navigation, and emergent structure | Active experiment |
 | [Space Invaders Pro](https://ncypher.github.io/tomfoolery/space-invaders-pro.html) | Game loops, particle systems, browser rendering, progression, and iterative refinement | Early experiment |
 | [3D Rubik’s Cube Pro](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) | Three.js, spatial interaction, lighting, camera systems, and interface design | Early experiment |
@@ -88,6 +90,11 @@ The journal is not an obligation to produce. It is an invitation to wonder:
 - What did an AI help me notice that I had not considered?
 - What idea refused to leave me alone?
 - What would make a beautiful artifact?
+
+### Recent field notes
+
+- **[Repo Excavations — Field Notes from the Living System](journal/2026/08-21-repo-excavations.md)** — failures becoming law, guardrails guarding guardrails, decoy realities, synthetic reality, and software archaeology.
+- **[What the Wren Hears](what-the-wren-hears.html)** — an interactive REOWren signal lab for seeing how LoRa symbols become cyclic chirps.
 
 ## What comes next
 

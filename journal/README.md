@@ -48,6 +48,12 @@ Still observing.</div>
 
 Not complete. Not final. **Still observing.**
 
+## Signal field note
+
+**[What the Wren Hears →](../what-the-wren-hears.html)** is an interactive REOWren artifact for seeing LoRa chirp spread spectrum rather than only reading about it. Move through the symbol space, change the spreading factor, add visual noise, and watch the cyclic chirp shift that carries the symbol.
+
+It is intentionally simplified at the message-mapping layer. The purpose is to make one physical idea visible: a LoRa symbol can be experienced as a cyclic shift of the chirp across the channel.
+
 ## Excavations
 
 Sometimes the useful observation is already buried in the repositories.
@@ -73,5 +79,5 @@ journal/2026/08-21-repo-excavations.md
 
 When an entry becomes interactive, link the field note to the executable page and link the executable page back to the observation. The artifact and its intellectual history should travel together.
 
-<div class="links"><a href="../artifacts/philosophy.md"><strong>Philosophy →</strong><br>Why the notebook exists.</a><a href="../artifacts/workflow.md"><strong>Workflow →</strong><br>How an idea circulates.</a><a href="../index.html"><strong>Return to the Museum →</strong><br>Open the collection.</a></div>
+<div class="links"><a href="../what-the-wren-hears.html"><strong>What the Wren Hears →</strong><br>Open the LoRa signal lab.</a><a href="2026/08-21-repo-excavations.md"><strong>Repo Excavations →</strong><br>Read the first excavation.</a><a href="../index.html"><strong>Return to the Museum →</strong><br>Open the collection.</a></div>
 </div>

@@ -48,6 +48,18 @@ Still observing.</div>
 
 Not complete. Not final. **Still observing.**
 
+## Excavations
+
+Sometimes the useful observation is already buried in the repositories.
+
+An **Excavation** is a walk through commit history, project-state files, evidence folders, abandoned branches, strange names, failed experiments, and operating rules. The goal is not to report productivity. It is to notice evolution: a failure that became law, a guardrail that failed, a stale environment that looked real, a model that correctly stopped, or two projects that unexpectedly began to rhyme.
+
+The archaeologist may be Tom, another human, or any model invited into the collection. Different observers are expected to notice different things.
+
+**[Read the first Repo Excavation →](2026/08-21-repo-excavations.md)**
+
+The repositories remember what happened. Excavations ask what it meant.
+
 ## Naming and preservation
 
 Use a date and a short phrase. Keep the thought close to the artifact and preserve the failed or unfinished version when it teaches something the polished version hides.
@@ -56,6 +68,7 @@ Use a date and a short phrase. Keep the thought close to the artifact and preser
 journal/2026/07-31-disagreement-is-information.md
 journal/2026/08-07-the-load-bearing-noodle.md
 journal/2026/08-16-runtime-overruled-us.md
+journal/2026/08-21-repo-excavations.md
 ```
 
 When an entry becomes interactive, link the field note to the executable page and link the executable page back to the observation. The artifact and its intellectual history should travel together.

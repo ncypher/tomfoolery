@@ -6,341 +6,8 @@
   <meta name="description" content="Conversational Artifacts: a living code journal collecting thoughts that wanted to become software.">
   <title>Conversational Artifacts</title>
   <style>
-    :root {
-      --bg: #091019;
-      --panel: #101a27;
-      --panel-soft: #0d1621;
-      --border: #24374b;
-      --text: #edf5ff;
-      --muted: #9db0c5;
-      --accent: #79d7ff;
-      --accent-2: #c98cff;
-      --archived: #d4a373;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at 18% 7%, rgba(121, 215, 255, 0.10), transparent 26%),
-        radial-gradient(circle at 86% 12%, rgba(201, 140, 255, 0.09), transparent 30%),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
-    }
-
-    a { color: inherit; }
-
-    .shell {
-      width: min(1160px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 26px 0 52px;
-    }
-
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 74px;
-    }
-
-    .brand {
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .nav-links a { text-decoration: none; }
-    .nav-links a:hover { color: var(--text); }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 42px;
-      align-items: end;
-      padding-bottom: 70px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 18px;
-      color: var(--accent);
-      font-size: 0.8rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      max-width: 820px;
-      font-size: clamp(3.4rem, 9vw, 7.4rem);
-      line-height: 0.88;
-      letter-spacing: -0.065em;
-    }
-
-    .mission {
-      margin: 28px 0 0;
-      max-width: 760px;
-      color: var(--muted);
-      font-size: clamp(1.12rem, 2vw, 1.38rem);
-    }
-
-    .thesis {
-      border-left: 2px solid var(--accent);
-      padding-left: 20px;
-      color: var(--muted);
-      font-size: 1rem;
-    }
-
-    .thesis strong {
-      display: block;
-      color: var(--text);
-      margin-bottom: 8px;
-      font-size: 1.1rem;
-    }
-
-    .section {
-      padding: 66px 0 0;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      align-items: end;
-      margin-bottom: 24px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      letter-spacing: -0.04em;
-    }
-
-    .section-head p {
-      margin: 0;
-      max-width: 520px;
-      color: var(--muted);
-    }
-
-    .featured {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      overflow: hidden;
-      background: rgba(16, 26, 39, 0.78);
-    }
-
-    .featured-copy {
-      padding: clamp(26px, 5vw, 54px);
-    }
-
-    .label {
-      display: inline-block;
-      margin-bottom: 16px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 5px 9px;
-      color: var(--muted);
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .featured h3 {
-      margin: 0 0 12px;
-      font-size: clamp(2rem, 5vw, 4.3rem);
-      line-height: 1;
-      letter-spacing: -0.05em;
-    }
-
-    .featured p {
-      margin: 0 0 24px;
-      color: var(--muted);
-      max-width: 620px;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 11px 15px;
-      background: var(--accent);
-      color: #061018;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .button:hover { filter: brightness(1.08); }
-
-    .featured-visual {
-      min-height: 360px;
-      display: grid;
-      place-items: center;
-      padding: 30px;
-      background:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
-        var(--panel-soft);
-      background-size: 28px 28px;
-    }
-
-    .orchestra {
-      width: min(100%, 420px);
-      aspect-ratio: 1;
-      position: relative;
-    }
-
-    .orb {
-      position: absolute;
-      display: grid;
-      place-items: center;
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--muted);
-      text-align: center;
-      font-size: 0.78rem;
-      box-shadow: 0 16px 34px rgba(0,0,0,0.2);
-    }
-
-    .orb.human {
-      top: 2%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-color: var(--accent);
-      color: var(--text);
-    }
-
-    .orb.one { top: 37%; left: 2%; }
-    .orb.two { top: 37%; left: 50%; transform: translateX(-50%); }
-    .orb.three { top: 37%; right: 2%; }
-    .orb.output { bottom: 0; left: 50%; transform: translateX(-50%); border-color: var(--accent-2); color: var(--text); }
-
-    .line {
-      position: absolute;
-      height: 1px;
-      background: var(--border);
-      transform-origin: left center;
-    }
-
-    .l1 { width: 155px; top: 28%; left: 23%; transform: rotate(145deg); }
-    .l2 { width: 105px; top: 29%; left: 50%; transform: rotate(90deg); }
-    .l3 { width: 155px; top: 28%; left: 54%; transform: rotate(35deg); }
-    .l4 { width: 145px; top: 64%; left: 20%; transform: rotate(38deg); }
-    .l5 { width: 112px; top: 64%; left: 50%; transform: rotate(90deg); }
-    .l6 { width: 145px; top: 64%; left: 55%; transform: rotate(142deg); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      min-height: 230px;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border);
-      border-radius: 19px;
-      padding: 22px;
-      background: rgba(16, 26, 39, 0.72);
-      text-decoration: none;
-      transition: transform 180ms ease, border-color 180ms ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-    }
-
-    .card-icon { font-size: 2rem; margin-bottom: 28px; }
-    .card h3 { margin: 0 0 8px; font-size: 1.25rem; }
-    .card p { margin: 0; color: var(--muted); font-size: 0.93rem; }
-    .card footer { margin-top: auto; padding-top: 20px; color: var(--muted); font-size: 0.78rem; }
-    .archived { border-style: dashed; }
-    .archived footer { color: var(--archived); }
-
-    .journal {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .journal-step {
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .journal-step span {
-      display: block;
-      color: var(--accent);
-      margin-bottom: 8px;
-      font-size: 0.78rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .journal-step h3 { margin: 0 0 6px; }
-    .journal-step p { margin: 0; color: var(--muted); }
-
-    .closing {
-      margin-top: 72px;
-      padding: 36px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      font-size: clamp(1.5rem, 4vw, 3.5rem);
-      line-height: 1.15;
-      letter-spacing: -0.04em;
-    }
-
-    .closing em { color: var(--accent); font-style: normal; }
-
-    .site-footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      padding-top: 28px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .site-footer a { text-decoration: none; }
-    .site-footer a:hover { color: var(--text); }
-
-    @media (max-width: 820px) {
-      .hero, .featured { grid-template-columns: 1fr; }
-      .grid, .journal { grid-template-columns: 1fr 1fr; }
-      .nav { margin-bottom: 46px; }
-      .section-head { display: block; }
-      .section-head p { margin-top: 10px; }
-    }
-
-    @media (max-width: 560px) {
-      .nav, .site-footer { align-items: flex-start; flex-direction: column; }
-      .grid, .journal { grid-template-columns: 1fr; }
-      .hero { padding-bottom: 50px; }
-      .featured-visual { min-height: 320px; padding: 16px; }
-      .orb { width: 76px; height: 76px; font-size: 0.68rem; }
-    }
+    :root{--bg:#091019;--panel:#101a27;--panel-soft:#0d1621;--border:#24374b;--text:#edf5ff;--muted:#9db0c5;--accent:#79d7ff;--accent-2:#c98cff;--archived:#d4a373}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 18% 7%,rgba(121,215,255,.1),transparent 26%),radial-gradient(circle at 86% 12%,rgba(201,140,255,.09),transparent 30%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}a{color:inherit}.shell{width:min(1160px,calc(100% - 32px));margin:0 auto;padding:26px 0 52px}.nav{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:74px}.brand{font-weight:700;letter-spacing:-.02em;text-decoration:none}.nav-links{display:flex;flex-wrap:wrap;gap:16px;color:var(--muted);font-size:.92rem}.nav-links a{text-decoration:none}.nav-links a:hover{color:var(--text)}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:42px;align-items:end;padding-bottom:70px;border-bottom:1px solid var(--border)}.eyebrow{display:inline-block;margin-bottom:18px;color:var(--accent);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}h1{margin:0;max-width:820px;font-size:clamp(3.4rem,9vw,7.4rem);line-height:.88;letter-spacing:-.065em}.mission{margin:28px 0 0;max-width:760px;color:var(--muted);font-size:clamp(1.12rem,2vw,1.38rem)}.thesis{border-left:2px solid var(--accent);padding-left:20px;color:var(--muted)}.thesis strong{display:block;color:var(--text);margin-bottom:8px;font-size:1.1rem}.section{padding:66px 0 0}.section-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:24px}.section-head h2{margin:0;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:-.04em}.section-head p{margin:0;max-width:520px;color:var(--muted)}.featured{display:grid;grid-template-columns:1.1fr .9fr;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:rgba(16,26,39,.78)}.featured-copy{padding:clamp(26px,5vw,54px)}.label{display:inline-block;margin-bottom:16px;border:1px solid var(--border);border-radius:999px;padding:5px 9px;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.1em}.featured h3{margin:0 0 12px;font-size:clamp(2rem,5vw,4.3rem);line-height:1;letter-spacing:-.05em}.featured p{margin:0 0 24px;color:var(--muted);max-width:620px}.button{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 15px;background:var(--accent);color:#061018;text-decoration:none;font-weight:700}.button:hover{filter:brightness(1.08)}.featured-visual{min-height:360px;display:grid;place-items:center;padding:30px;background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),var(--panel-soft);background-size:28px 28px}.chirp{width:min(100%,420px);height:260px;position:relative;border:1px solid var(--border);border-radius:18px;background:linear-gradient(rgba(121,215,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(121,215,255,.05) 1px,transparent 1px);background-size:32px 32px;overflow:hidden}.chirp:before,.chirp:after{content:"";position:absolute;height:3px;background:var(--accent);box-shadow:0 0 14px rgba(121,215,255,.8);transform:rotate(-31deg);transform-origin:left center}.chirp:before{width:255px;left:20px;bottom:40px}.chirp:after{width:190px;right:-36px;top:52px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{min-height:230px;display:flex;flex-direction:column;border:1px solid var(--border);border-radius:19px;padding:22px;background:rgba(16,26,39,.72);text-decoration:none;transition:transform 180ms ease,border-color 180ms ease}.card:hover{transform:translateY(-4px);border-color:var(--accent)}.card-icon{font-size:2rem;margin-bottom:28px}.card h3{margin:0 0 8px;font-size:1.25rem}.card p{margin:0;color:var(--muted);font-size:.93rem}.card footer{margin-top:auto;padding-top:20px;color:var(--muted);font-size:.78rem}.archived{border-style:dashed}.archived footer{color:var(--archived)}.journal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.journal-step{padding:20px 0;border-top:1px solid var(--border)}.journal-step span{display:block;color:var(--accent);margin-bottom:8px;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}.journal-step h3{margin:0 0 6px}.journal-step p{margin:0;color:var(--muted)}.closing{margin-top:72px;padding:36px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-size:clamp(1.5rem,4vw,3.5rem);line-height:1.15;letter-spacing:-.04em}.closing em{color:var(--accent);font-style:normal}.site-footer{display:flex;justify-content:space-between;gap:18px;padding-top:28px;color:var(--muted);font-size:.9rem}.site-footer a{text-decoration:none}.site-footer a:hover{color:var(--text)}@media(max-width:820px){.hero,.featured{grid-template-columns:1fr}.grid,.journal{grid-template-columns:1fr 1fr}.nav{margin-bottom:46px}.section-head{display:block}.section-head p{margin-top:10px}}@media(max-width:560px){.nav,.site-footer{align-items:flex-start;flex-direction:column}.grid,.journal{grid-template-columns:1fr}.hero{padding-bottom:50px}.featured-visual{min-height:300px;padding:16px}}
   </style>
 </head>
 <body>
@@ -350,6 +17,7 @@
       <div class="nav-links">
         <a href="#collection">Collection</a>
         <a href="#journal">Code Journal</a>
+        <a href="journal/README.md">Journal Room</a>
         <a href="artifacts/philosophy.md">Philosophy</a>
         <a href="https://github.com/ncypher/tomfoolery">GitHub</a>
       </div>
@@ -371,37 +39,25 @@
       <section class="section" aria-labelledby="featured-title">
         <div class="section-head">
           <h2 id="featured-title">Newest artifact</h2>
-          <p>A visual field note about developing with multiple models rather than expecting one system to carry the entire process.</p>
+          <p>A signal-level field note from REOWren: move through the LoRa symbol space and watch the chirp itself change.</p>
         </div>
-
         <article class="featured">
           <div class="featured-copy">
-            <span class="label">Field Note 001</span>
-            <h3>AI Orchestra</h3>
-            <p>Watch one human intention circulate through generation, architecture, exploration, critique, and runtime evidence before becoming an artifact.</p>
-            <a class="button" href="ai-orchestra.html">Open the artifact →</a>
+            <span class="label">Signal Lab · REOWren</span>
+            <h3>What the Wren Hears</h3>
+            <p>Explore LoRa chirp spread spectrum with an interactive symbol slider, spreading factors, noise, a toy transmitter, and a receiver guessing game.</p>
+            <a class="button" href="what-the-wren-hears.html">Open the signal lab →</a>
           </div>
-          <div class="featured-visual" aria-hidden="true">
-            <div class="orchestra">
-              <div class="line l1"></div><div class="line l2"></div><div class="line l3"></div>
-              <div class="line l4"></div><div class="line l5"></div><div class="line l6"></div>
-              <div class="orb human">Human<br>intent</div>
-              <div class="orb one">Generate</div>
-              <div class="orb two">Critique</div>
-              <div class="orb three">Explore</div>
-              <div class="orb output">Artifact</div>
-            </div>
-          </div>
+          <div class="featured-visual" aria-hidden="true"><div class="chirp"></div></div>
         </article>
       </section>
 
       <section class="section" id="collection" aria-labelledby="collection-title">
-        <div class="section-head">
-          <h2 id="collection-title">Artifact collection</h2>
-          <p>The early experiments remain here as evidence of the process: compact, imperfect, playable, and preserved.</p>
-        </div>
-
+        <div class="section-head"><h2 id="collection-title">Artifact collection</h2><p>Compact, imperfect, playable experiments — plus the field notes that explain how they evolved.</p></div>
         <div class="grid">
+          <a class="card" href="what-the-wren-hears.html"><div class="card-icon">📡</div><h3>What the Wren Hears</h3><p>LoRa symbols, cyclic chirps, spreading factors, noise, and the shape of information in RF.</p><footer>Interactive signal lab</footer></a>
+          <a class="card" href="ai-orchestra.html"><div class="card-icon">🎼</div><h3>AI Orchestra</h3><p>Generation, critique, distributed roles, runtime evidence, and human direction.</p><footer>Interactive systems artifact</footer></a>
+          <a class="card" href="journal/2026/08-21-repo-excavations.md"><div class="card-icon">⛏️</div><h3>Repo Excavations</h3><p>Field notes from failures that became rules, decoy realities, empty rooms, and software fossils.</p><footer>Living code journal · excavation</footer></a>
           <a class="card" href="space-invaders-pro.html"><div class="card-icon">👾</div><h3>Space Invaders</h3><p>Game loops, particles, progression, sound, and iterative browser rendering.</p><footer>Playable experiment</footer></a>
           <a class="card" href="rubiks-cube-pro.html"><div class="card-icon">🧩</div><h3>3D Rubik's Cube</h3><p>Three.js, lighting, camera controls, spatial interfaces, and interaction design.</p><footer>Playable experiment</footer></a>
           <a class="card" href="snake-pro.html"><div class="card-icon">🐍</div><h3>Snake</h3><p>Animation timing, state management, responsive controls, and persistent scores.</p><footer>Playable experiment</footer></a>
@@ -412,11 +68,7 @@
       </section>
 
       <section class="section" id="journal" aria-labelledby="journal-title">
-        <div class="section-head">
-          <h2 id="journal-title">The code journal</h2>
-          <p>Not a requirement to publish. An invitation to notice something and give it a small form.</p>
-        </div>
-
+        <div class="section-head"><h2 id="journal-title">The code journal</h2><p>Not a requirement to publish. An invitation to notice something and give it a small form.</p></div>
         <div class="journal">
           <article class="journal-step"><span>01 · A thought</span><h3>Notice the idea.</h3><p>A sentence, question, analogy, tension, or pattern that refuses to leave.</p></article>
           <article class="journal-step"><span>02 · A sketch</span><h3>Make it visible.</h3><p>A diagram, SVG, movement, simulation, interface, or tiny system.</p></article>
@@ -424,15 +76,9 @@
         </div>
       </section>
 
-      <section class="closing">
-        Do not make yourself write. <em>Make yourself wonder.</em>
-      </section>
+      <section class="closing">Do not make yourself write. <em>Make yourself wonder.</em></section>
     </main>
-
-    <footer class="site-footer">
-      <span>Every artifact begins with language.</span>
-      <span><a href="https://github.com/ncypher/tomfoolery">Source and field notes on GitHub</a></span>
-    </footer>
+    <footer class="site-footer"><span>Every artifact begins with language.</span><span><a href="journal/README.md">Enter the journal</a> · <a href="https://github.com/ncypher/tomfoolery">Source on GitHub</a></span></footer>
   </div>
 </body>
 </html>

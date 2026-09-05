@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build-pages.mjs",
     "check": "node scripts/check-links.mjs",
-    "test": "node scripts/test-orchestra.mjs && node scripts/test-pixel-pet.mjs"
+    "test": "node scripts/test-orchestra.mjs && node scripts/test-pixel-pet.mjs && node scripts/test-crown.mjs"
   },
   "devDependencies": {
     "marked": "15.0.12"

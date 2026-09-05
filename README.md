@@ -16,7 +16,7 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 | [Pixel Pet](https://ncypher.github.io/tomfoolery/pixel-pet.html) | Care for a pixel creature, grow a bond, and explore gentle feedback in a persistent terrarium |
 | [Feedback Knot](https://ncypher.github.io/tomfoolery/feedback-knot.html) | Follow development through disagreement, appeals, and reopened questions |
 | [AI Orchestra](https://ncypher.github.io/tomfoolery/ai-orchestra.html) | Compare specialized roles and review loops in the earlier orchestration sketch |
-| [Crown & Cinder](https://ncypher.github.io/tomfoolery/crown-and-cinder.html) | Rule a river kingdom with competing powers and costly decisions |
+| [Crown & Cinder](https://ncypher.github.io/tomfoolery/crown-and-cinder.html) | Plan three orders per season, move armies, forecast battles, and resume a persistent campaign |
 | [The Noisy Channel](https://ncypher.github.io/tomfoolery/shannon-noisy-channel.html) | Manipulate entropy, coding, noise, and error recovery |
 | [What the Wren Hears](https://ncypher.github.io/tomfoolery/what-the-wren-hears.html) | See radio symbols as cyclic chirps |
 | [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Explore recursive structure through mathematical visualization |

@@ -22,6 +22,10 @@ Commit the two generated SVGs in this repository. The standalone illustration us
 
 Pixel Pet keeps its pure care rules in `assets/pixel-pet-engine.mjs`, browser storage and rendering in `assets/pixel-pet-ui.mjs`, and vector artwork in `pixel-pet.html`. Its version-2 save uses `pixelPetTerrariumV2`; the old `pixelPetStatePro` save is read for migration and left intact. Older dead pets recover with a minimum of 35 in their original needs. Malformed saves fall back safely, and storage failures leave a playable session with an explanatory message. Only active, visible time advances needs; sleep restores energy, and zero needs never create an unrecoverable state. `scripts/test-pixel-pet.mjs` covers migration, invalid data, care effects, time bounds, and recovery.
 
+## Crown & Cinder
+
+Crown & Cinder separates the seeded simulation (`assets/crown-engine.mjs`), original canvas cartography (`assets/crown-map.mjs`), and interface (`assets/crown-ui.mjs`). Saves use `crownAndCinderV2`, including the random generator state. Orders validate ownership, adjacency, costs, troop counts, and the three-order budget before changing state. Player and rival combat share the same defense and casualty rules. Economy forecasts include current production and upkeep, but exclude subsequent events and conquests. Survival victory requires 48 completed seasons and stability strictly above 55. `scripts/test-crown.mjs` covers these rules, save validation, and multi-season campaigns. Original GPT-5.6 Sol credits remain alongside the OpenAI Codex revision credit.
+
 ## Publishing
 
 Publish tomfoolery first, including generated HTML, both SVGs, scripts, CSS, and `.nojekyll`. Check the deployed Journal Room, Philosophy, and Polycentric Orchestra. Then publish the profile repository so its new links have destinations. The local changes alone do not update GitHub or GitHub Pages.

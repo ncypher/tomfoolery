@@ -1,369 +1,65 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Pet Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #d2f4d2;
-            --screen-bg: #a0e0a0;
-            --screen-border: #4a684a;
-            --ui-color: #5a8a5a;
-            --text-color: #202820;
-            --happy-color: #34d399;
-            --sad-color: #f87171;
-            --energy-color: #60a5fa;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Press Start 2P', cursive;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: var(--text-color);
-        }
-
-        #game-container {
-            background: var(--ui-color);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
-            border: 4px solid var(--screen-border);
-            width: 500px;
-        }
-
-        #screen {
-            width: 100%;
-            height: 350px;
-            background: var(--screen-bg);
-            border: 10px solid var(--screen-border);
-            border-radius: 10px;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #pet-display {
-            width: 150px;
-            height: 150px;
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: transform 0.5s ease;
-        }
-        
-        #pet-display.happy {
-            animation: bounce 0.5s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, -15px); }
-        }
-
-        #poop {
-            width: 30px;
-            height: 30px;
-            background: #854d0e;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 50px;
-            left: 65%;
-            box-shadow: 5px 5px 0 #653d0b;
-            display: none;
-        }
-
-        #ui {
-            padding: 20px 0 0 0;
-            text-align: center;
-        }
-
-        .stat-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .stat-label { font-size: 12px; margin-right: 10px;}
-        .stat-bar {
-            width: 100%;
-            height: 15px;
-            background: #ccc;
-            border: 2px solid var(--screen-border);
-            border-radius: 5px;
-        }
-        .stat-bar-inner {
-            height: 100%;
-            width: 100%;
-            transition: width 0.5s;
-            border-radius: 3px;
-        }
-        #hunger-bar .stat-bar-inner { background: var(--sad-color); }
-        #happiness-bar .stat-bar-inner { background: var(--happy-color); }
-        #energy-bar .stat-bar-inner { background: var(--energy-color); }
-
-        .buttons button {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 16px;
-            padding: 15px 20px;
-            margin: 5px;
-            border-radius: 10px;
-            border: 4px solid var(--screen-border);
-            cursor: pointer;
-            background: var(--screen-bg);
-            color: var(--text-color);
-        }
-        .buttons button:active:not(:disabled) {
-            transform: translateY(2px);
-        }
-        .buttons button:disabled {
-            background: #999;
-            cursor: not-allowed;
-        }
-
-        #message {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            background: rgba(0,0,0,0.1);
-            padding: 5px 10px;
-            border-radius: 5px;
-            text-align: center;
-            width: 90%;
-        }
-
-    </style>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pixel Pet · A little world that waits for you</title>
+  <meta name="description" content="A gentle pixel terrarium. Feed, play, rest, and grow a friendship with a little creature. Your world pauses while you are away.">
+  <link rel="stylesheet" href="assets/pixel-pet.css">
 </head>
 <body>
-
-<div id="game-container">
-    <div id="screen">
-        <div id="message"></div>
-        <div id="pet-display"></div>
-        <div id="poop"></div>
-    </div>
-    <div id="ui">
-        <div class="stat-container" id="hunger-bar"><span class="stat-label">Hunger</span><div class="stat-bar"><div class="stat-bar-inner"></div></div></div>
-        <div class="stat-container" id="happiness-bar"><span class="stat-label">Happy</span><div class="stat-bar"><div class="stat-bar-inner"></div></div></div>
-        <div class="stat-container" id="energy-bar"><span class="stat-label">Energy</span><div class="stat-bar"><div class="stat-bar-inner"></div></div></div>
-        <div class="buttons">
-            <button id="feed-button">Feed</button>
-            <button id="play-button">Play</button>
-            <button id="sleep-button">Sleep</button>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="shell">
+  <nav class="nav" aria-label="Notebook"><a href="./">← Conversational Artifacts</a><span><a href="journal/">Journal Room</a> · <a href="artifacts/philosophy.html">Philosophy</a></span></nav>
+  <main id="main">
+    <header class="intro"><div><span class="kicker">Small worlds / No. 01</span><h1>A little life.<br>A little attention.</h1></div><p>A pocket-sized terrarium.<br>A friend with simple needs.<br>An afternoon at your own pace.</p></header>
+    <div class="game">
+      <section class="device" aria-label="Pixel Pet terrarium">
+        <div class="device-top"><span><span class="led"></span>Pixel Pet</span><span id="room-status">A little world</span></div>
+        <div class="room" id="room" data-sleeping="false" data-mood="content">
+          <span class="room-label" id="scene-label">A quiet afternoon</span>
+          <div class="sun" aria-hidden="true"></div><div class="cloud" aria-hidden="true"></div><div class="backhill" aria-hidden="true"></div><div class="backhill right" aria-hidden="true"></div><div class="floor" aria-hidden="true"></div><div class="tuft" aria-hidden="true"></div><div class="tuft right" aria-hidden="true"></div><div class="flower" aria-hidden="true"></div>
+          <button class="pet-button" id="pet-button" aria-label="Give Pip a gentle pat" disabled>
+            <svg class="pet-sprite" viewBox="0 0 160 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges">
+              <path class="pet-shade" d="M75 40V24H64V16H48V8H68V16H82V32H88V20H103V12H116V25H103V32H88V42Z"/>
+              <path class="pet-shade" d="M35 55H48V43H112V55H125V68H136V137H123V149H110V160H91V149H67V160H48V149H35V137H24V70H35Z"/>
+              <path class="pet-body" d="M39 58H51V47H109V58H122V72H132V132H119V145H41V132H28V73H39Z"/>
+              <path class="pet-highlight" d="M42 61H55V52H104V61H55V72H42V99H33V76H42Z"/>
+              <g class="eyes" id="eyes" fill="#293e33"><path d="M52 87H64V103H52ZM96 87H108V103H96Z"/><path d="M54 88H58V92H54ZM98 88H102V92H98Z" fill="#f7f8dc"/></g>
+              <path d="M42 110H57V115H42ZM104 110H119V115H104Z" fill="#d79279" opacity=".7"/>
+              <path id="mouth" d="M70 111V117H90V111" stroke="#293e33" stroke-width="4" fill="none"/>
+              <path class="pet-shade" d="M39 122H49V131H39ZM111 122H121V131H111Z"/>
+            </svg>
+          </button>
+          <span class="spark" id="spark" aria-hidden="true">♡</span><div class="ball" aria-hidden="true"></div><div class="crumbs" aria-hidden="true"></div><span class="zz" aria-hidden="true">z z Z</span>
         </div>
+        <div class="message" id="message" role="status">Your little friend is getting comfortable.</div>
+        <div class="controls" aria-label="Care actions">
+          <button class="care" id="feed-button" disabled><span aria-hidden="true">♧</span>Feed</button>
+          <button class="care" id="play-button" disabled><span aria-hidden="true">◉</span>Play</button>
+          <button class="care" id="clean-button" disabled><span aria-hidden="true">✧</span>Clean</button>
+          <button class="care" id="sleep-button" disabled><span aria-hidden="true">☾</span><span id="sleep-label" style="font:inherit;margin:0">Sleep</span></button>
+        </div>
+      </section>
+      <section class="panel" aria-labelledby="pet-name">
+        <div class="pet-heading"><div><span class="kicker">Your little companion</span><h2 id="pet-name">Pip</h2></div><span class="badge" id="mood">content</span></div>
+        <p class="subtitle" id="growth">New friend · getting to know you</p>
+        <div class="stat"><div class="stat-label"><label for="fullness">Fullness</label><output id="fullness-value">72 / 100</output></div><meter id="fullness" min="0" max="100" low="30" high="65" optimum="100" value="72">72%</meter></div>
+        <div class="stat"><div class="stat-label"><label for="joy">Joy</label><output id="joy-value">68 / 100</output></div><meter id="joy" min="0" max="100" low="30" high="65" optimum="100" value="68">68%</meter></div>
+        <div class="stat"><div class="stat-label"><label for="energy">Energy</label><output id="energy-value">80 / 100</output></div><meter id="energy" min="0" max="100" low="20" high="65" optimum="100" value="80">80%</meter></div>
+        <div class="stat"><div class="stat-label"><label for="cleanliness">Cleanliness</label><output id="cleanliness-value">85 / 100</output></div><meter id="cleanliness" min="0" max="100" low="35" high="65" optimum="100" value="85">85%</meter></div>
+        <p class="hint" id="hint">Try a berry, a game, or a gentle pat.</p>
+        <div class="bond"><div class="bond-head"><label for="bond">A growing friendship</label><span id="bond-value">0 / 40</span></div><progress id="bond" value="0" max="40">0</progress><p id="bond-hint">Small acts of care help a new friend feel at home.</p></div>
+        <details class="settings"><summary>Make this little world yours</summary>
+          <form id="name-form"><label for="name-input">Your pet's name</label><div class="name-row"><input id="name-input" maxlength="20" value="Pip" autocomplete="off"><button class="small-button" type="submit">Save</button></div></form>
+          <p>Choose a color</p><div class="palettes" role="group" aria-label="Pet color"><button class="palette fern" data-palette="fern" aria-pressed="true">Fern</button><button class="palette peach" data-palette="peach" aria-pressed="false">Peach</button><button class="palette sky" data-palette="sky" aria-pressed="false">Sky</button></div>
+        </details>
+        <p class="save-note" id="save-note">Saved on this browser. Away time is quiet time.</p>
+      </section>
     </div>
+    <noscript><p>Enable JavaScript to care for your pet. This little world runs entirely in your browser.</p></noscript>
+    <section class="field-note" aria-label="About this experiment"><div><h2>A kinder kind of feedback.</h2><p>Care changes the creature; the creature shows you what it needs. There is no game-over screen. Low needs are an invitation to help, and time pauses when you leave or switch tabs.</p></div><div><h2>Small things to discover</h2><ul><li>Tap your friend for a gentle pat.</li><li>Play spends energy. Sleep restores it.</li><li>Care grows your bond; the garden blooms with it.</li><li>Come back whenever. Your world will wait.</li></ul></div></section>
+  </main>
 </div>
-
-<script>
-class PixelPet {
-    constructor() {
-        this.petDisplay = document.getElementById('pet-display');
-        this.poopElement = document.getElementById('poop');
-        this.messageElement = document.getElementById('message');
-
-        this.hungerBar = document.querySelector('#hunger-bar .stat-bar-inner');
-        this.happinessBar = document.querySelector('#happiness-bar .stat-bar-inner');
-        this.energyBar = document.querySelector('#energy-bar .stat-bar-inner');
-
-        this.feedButton = document.getElementById('feed-button');
-        this.playButton = document.getElementById('play-button');
-        this.sleepButton = document.getElementById('sleep-button');
-
-        this.state = {
-            hunger: 100,
-            happiness: 100,
-            energy: 100,
-            isSleeping: false,
-            isAlive: true,
-            lastUpdate: Date.now()
-        };
-
-        this.petState = 'happy'; // happy, sad, hungry, tired, sleeping, dead
-
-        this.bindEvents();
-        this.loadGame();
-        this.gameLoop();
-        setInterval(() => this.gameLoop(), 1000);
-    }
-
-    bindEvents() {
-        this.feedButton.addEventListener('click', () => this.feed());
-        this.playButton.addEventListener('click', () => this.play());
-        this.sleepButton.addEventListener('click', () => this.sleep());
-    }
-
-    feed() {
-        if (this.state.isSleeping || !this.state.isAlive) return;
-        if (this.state.hunger >= 100) {
-            this.showMessage("I'm already full!");
-            return;
-        }
-        this.state.hunger = Math.min(100, this.state.hunger + 25);
-        this.showMessage("Yum! That was tasty.");
-        this.updateUI();
-    }
-
-    play() {
-        if (this.state.isSleeping || !this.state.isAlive) return;
-        if (this.state.energy < 20) {
-            this.showMessage("Too tired to play...");
-            return;
-        }
-        this.state.happiness = Math.min(100, this.state.happiness + 20);
-        this.state.energy = Math.max(0, this.state.energy - 15);
-        this.showMessage("Weee! That was fun!");
-        this.updateUI();
-    }
-
-    sleep() {
-        if (!this.state.isAlive) return;
-        this.state.isSleeping = !this.state.isSleeping;
-        if (this.state.isSleeping) {
-            this.showMessage("Zzzz... sleeping...");
-        } else {
-            this.showMessage("I'm awake now!");
-        }
-        this.updateUI();
-    }
-
-    showMessage(msg) {
-        this.messageElement.textContent = msg;
-        setTimeout(() => { this.messageElement.textContent = '' }, 2500);
-    }
-
-    getFaceSVG() {
-        const eyeColor = "#333";
-        const mouthColor = "#333";
-        const faceColor = this.state.isSleeping ? "#cceeff" : "#FFFDE7";
-
-        let eyesSVG = `<circle cx="45" cy="60" r="12" fill="${eyeColor}" /><circle cx="105" cy="60" r="12" fill="${eyeColor}" />`;
-        let mouthSVG = `<path d="M 50 110 Q 75 125 100 110" stroke="${mouthColor}" stroke-width="5" fill="none" />`;
-
-        switch (this.petState) {
-            case "veryHappy":
-                eyesSVG = `<path d="M 35 60 Q 45 45 55 60" stroke="${eyeColor}" stroke-width="5" fill="none" />` +
-                          `<path d="M 95 60 Q 105 45 115 60" stroke="${eyeColor}" stroke-width="5" fill="none" />`;
-                mouthSVG = `<path d="M 40 100 Q 75 135 110 100" stroke="${mouthColor}" stroke-width="5" fill="none" />`;
-                break;
-            case "sad":
-                mouthSVG = `<path d="M 50 120 Q 75 105 100 120" stroke="${mouthColor}" stroke-width="5" fill="none" />`;
-                break;
-            case "hungry":
-                mouthSVG = `<ellipse cx="75" cy="115" rx="25" ry="15" stroke="${mouthColor}" stroke-width="4" fill="#ffeecc" />`;
-                break;
-            case "tired":
-                eyesSVG = `<rect x="30" y="55" width="30" height="8" fill="${eyeColor}" rx="4"/><rect x="90" y="55" width="30" height="8" fill="${eyeColor}" rx="4"/>`;
-                break;
-            case "sleeping":
-                eyesSVG = `<path d="M 35 60 Q 45 75 55 60" stroke="${eyeColor}" stroke-width="5" fill="none" />` +
-                          `<path d="M 95 60 Q 105 75 115 60" stroke="${eyeColor}" stroke-width="5" fill="none" />`;
-                mouthSVG = `<line x1="60" y1="115" x2="90" y2="115" stroke="${mouthColor}" stroke-width="4" />`;
-                break;
-            case "dead":
-                eyesSVG = `<line x1="30" y1="45" x2="60" y2="75" stroke="${eyeColor}" stroke-width="6" />` +
-                          `<line x1="60" y1="45" x2="30" y2="75" stroke="${eyeColor}" stroke-width="6" />` +
-                          `<line x1="90" y1="45" x2="120" y2="75" stroke="${eyeColor}" stroke-width="6" />` +
-                          `<line x1="120" y1="45" x2="90" y2="75" stroke="${eyeColor}" stroke-width="6" />`;
-                mouthSVG = `<line x1="50" y1="115" x2="100" y2="115" stroke="${mouthColor}" stroke-width="5" />`;
-                break;
-        }
-
-        return `<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="0" width="150" height="150" fill="${faceColor}" rx="30"/>
-                    ${eyesSVG}
-                    ${mouthSVG}
-                </svg>`;
-    }
-
-    updateUI() {
-        this.hungerBar.style.width = this.state.hunger + '%';
-        this.happinessBar.style.width = this.state.happiness + '%';
-        this.energyBar.style.width = this.state.energy + '%';
-
-        this.petDisplay.innerHTML = this.getFaceSVG();
-        this.petDisplay.className = this.petState;
-        
-        this.sleepButton.textContent = this.state.isSleeping ? "Wake Up" : "Sleep";
-        this.feedButton.disabled = this.state.isSleeping;
-        this.playButton.disabled = this.state.isSleeping;
-
-        if (this.petState === 'dead') {
-            this.feedButton.disabled = true;
-            this.playButton.disabled = true;
-            this.sleepButton.disabled = true;
-        }
-    }
-
-    determinePetState() {
-        if (!this.state.isAlive) {
-            this.petState = 'dead';
-            return;
-        }
-        if (this.state.isSleeping) {
-            this.petState = 'sleeping';
-            return;
-        }
-        if (this.state.hunger < 30) {
-            this.petState = 'hungry';
-        } else if (this.state.happiness < 30) {
-            this.petState = 'sad';
-        } else if (this.state.energy < 20) {
-            this.petState = 'tired';
-        } else if (this.state.happiness > 80) {
-            this.petState = 'veryHappy';
-        } else {
-            this.petState = 'happy';
-        }
-    }
-
-    gameLoop() {
-        if (!this.state.isAlive) return;
-
-        const now = Date.now();
-        const elapsed = (now - this.state.lastUpdate) / 1000; // seconds
-
-        if (this.state.isSleeping) {
-            this.state.energy = Math.min(100, this.state.energy + (elapsed / 2)); // 1 point every 2s
-        } else {
-            const decayRate = 1 / 5; // 1 point every 5s
-            this.state.hunger = Math.max(0, this.state.hunger - decayRate * elapsed);
-            this.state.happiness = Math.max(0, this.state.happiness - decayRate * elapsed * 1.2);
-            this.state.energy = Math.max(0, this.state.energy - decayRate * elapsed * 0.8);
-        }
-
-        if (this.state.hunger <= 0 || this.state.happiness <= 0) {
-            this.state.isAlive = false;
-            this.showMessage("Your pet got sad and ran away...");
-        }
-
-        this.state.lastUpdate = now;
-        this.determinePetState();
-        this.saveGame();
-        this.updateUI();
-    }
-
-    saveGame() {
-        localStorage.setItem('pixelPetStatePro', JSON.stringify(this.state));
-    }
-
-    loadGame() {
-        const savedState = localStorage.getItem('pixelPetStatePro');
-        if (savedState) {
-            this.state = JSON.parse(savedState);
-        }
-    }
-}
-
-// --- Init ---
-const petGame = new PixelPet();
-
-</script>
-</body>
-</html>
+<footer class="notebook-footer"><a href="./#collection">← Back to the collection</a><span>A thought, given a little life.</span><a href="https://github.com/ncypher/tomfoolery/blob/main/pixel-pet.html">View the source</a></footer>
+<script type="module" src="assets/pixel-pet-ui.mjs"></script>
+</body></html>

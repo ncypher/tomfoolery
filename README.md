@@ -13,6 +13,7 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 | Artifact | What you can explore |
 | --- | --- |
 | [Polycentric Orchestra](https://ncypher.github.io/tomfoolery/polycentric-orchestra.html) | Govern a proposal with dissent, revision-specific evidence, and human acceptance |
+| [Pixel Pet](https://ncypher.github.io/tomfoolery/pixel-pet.html) | Care for a pixel creature, grow a bond, and explore gentle feedback in a persistent terrarium |
 | [Feedback Knot](https://ncypher.github.io/tomfoolery/feedback-knot.html) | Follow development through disagreement, appeals, and reopened questions |
 | [AI Orchestra](https://ncypher.github.io/tomfoolery/ai-orchestra.html) | Compare specialized roles and review loops in the earlier orchestration sketch |
 | [Crown & Cinder](https://ncypher.github.io/tomfoolery/crown-and-cinder.html) | Rule a river kingdom with competing powers and costly decisions |
@@ -21,7 +22,7 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 | [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Explore recursive structure through mathematical visualization |
 | [Rubik's Cube — GPT-5.6 Sol](https://ncypher.github.io/tomfoolery/rubiks-cube-gpt-5-6-sol.html) | Inspect legal turns, scrambling, and an inverse-history solver |
 
-The earlier [Space Invaders](https://ncypher.github.io/tomfoolery/space-invaders-pro.html), [Snake](https://ncypher.github.io/tomfoolery/snake-pro.html), [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html), and [Three.js cube](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) remain part of the record. **Pixel Pet is archived and currently marked non-functional.**
+The earlier [Space Invaders](https://ncypher.github.io/tomfoolery/space-invaders-pro.html), [Snake](https://ncypher.github.io/tomfoolery/snake-pro.html), [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html), and [Three.js cube](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) remain part of the record. Pixel Pet has grown from the earlier virtual-pet sketch into a recoverable, persistent little world.
 
 ## The notebook behind the software
 

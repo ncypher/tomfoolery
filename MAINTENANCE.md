@@ -18,6 +18,10 @@ Commit the two generated SVGs in this repository. The standalone illustration us
 
 `npm test` checks acceptance gates, failed checks, reopened work, stale evidence, retained dissent, and transition immutability. `npm run check` validates relative links and assets throughout the HTML collection. Browser checks should include phone-sized layouts, keyboard controls, and reduced motion.
 
+## Pixel Pet
+
+Pixel Pet keeps its pure care rules in `assets/pixel-pet-engine.mjs`, browser storage and rendering in `assets/pixel-pet-ui.mjs`, and vector artwork in `pixel-pet.html`. Its version-2 save uses `pixelPetTerrariumV2`; the old `pixelPetStatePro` save is read for migration and left intact. Older dead pets recover with a minimum of 35 in their original needs. Malformed saves fall back safely, and storage failures leave a playable session with an explanatory message. Only active, visible time advances needs; sleep restores energy, and zero needs never create an unrecoverable state. `scripts/test-pixel-pet.mjs` covers migration, invalid data, care effects, time bounds, and recovery.
+
 ## Publishing
 
 Publish tomfoolery first, including generated HTML, both SVGs, scripts, CSS, and `.nojekyll`. Check the deployed Journal Room, Philosophy, and Polycentric Orchestra. Then publish the profile repository so its new links have destinations. The local changes alone do not update GitHub or GitHub Pages.

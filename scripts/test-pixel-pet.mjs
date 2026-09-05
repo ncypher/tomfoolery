@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import { newPet, restorePet, tickPet, careFor, moodOf, growthOf } from '../assets/pixel-pet-engine.mjs';
+const dead = restorePet(null, JSON.stringify({isAlive:false,hunger:0,happiness:0,energy:0}));
+assert.ok(dead.state.fullness >= 35);
+assert.equal(careFor(dead.state,'feed').state.fullness, 60);
+for (const raw of ['{','null','[]','123','"oops"','{"version":99}']) assert.equal(restorePet(raw,null).state.version,2);
+const malformed = restorePet('{"version":2,"fullness":"oops","joy":-12,"energy":999,"name":{},"palette":"red","sleeping":"false"}',null).state;
+assert.equal(malformed.fullness,75); assert.equal(malformed.joy,0); assert.equal(malformed.energy,100); assert.equal(malformed.sleeping,false); assert.equal(malformed.name,'Pip'); assert.equal(malformed.palette,'fern');
+let state = newPet();
+const snapshot = JSON.stringify(state);
+const fed = careFor(state,'feed').state;
+assert.ok(fed.fullness > state.fullness && fed.cleanliness < state.cleanliness);
+assert.equal(JSON.stringify(state),snapshot,'Care must not mutate previous state');
+const played = careFor(state,'play').state;
+assert.ok(played.energy < state.energy && played.joy > state.joy);
+const sleeping = careFor(played,'sleep').state;
+assert.equal(careFor(sleeping,'feed').state,sleeping);
+assert.ok(tickPet(sleeping,5).energy > sleeping.energy);
+assert.equal(moodOf(sleeping),'sleeping');
+assert.equal(tickPet(state,86400000).activeSeconds,5,'Suspension cannot create unbounded catch-up');
+assert.deepEqual(tickPet(state,-10),state);
+assert.deepEqual(tickPet(state,NaN),state);
+const saved = {...newPet(), name:'Fern', fullness:48, bond:60, lastUpdate:0};
+assert.equal(restorePet(JSON.stringify(saved),null).state.fullness,48,'Reload does not charge offline time');
+assert.equal(growthOf(saved),'Little companion');
+assert.equal(growthOf({...saved,bond:100}),'Kindred spirit');
+state = {...newPet(),fullness:0,joy:0,energy:0,cleanliness:0};
+state = careFor(state,'feed').state;
+state = careFor(state,'clean').state;
+state = careFor(state,'sleep').state;
+for (let i=0;i<15;i++) state = tickPet(state,5);
+state = careFor(state,'sleep').state;
+assert.ok(state.energy >= 99 && state.fullness > 0 && state.cleanliness > 90,'All-zero needs remain recoverable');
+for (let i=0;i<2000;i++) {
+  state = careFor(tickPet(state,5),['feed','play','clean','sleep','pet'][i%5]).state;
+  for (const key of ['fullness','joy','energy','cleanliness']) assert.ok(Number.isFinite(state[key]) && state[key]>=0 && state[key]<=100);
+}
+console.log('Pixel Pet: legacy rescue, corrupt saves, care effects, sleep, bounded time, recovery, and 2,000 care cycles passed.');

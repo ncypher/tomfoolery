@@ -34,6 +34,9 @@ The journal is not a production schedule. It is an invitation to notice.
 
 ## Signal field note
 
+[Read the field report: What the Wren Hears](2026/08-21-what-the-wren-hears.html).
+
+
 **[What the Wren Hears →](../what-the-wren-hears.html)** is an interactive REOWren artifact for seeing LoRa chirp spread spectrum rather than only reading about it.
 
 ## Excavations

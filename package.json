@@ -1,0 +1,13 @@
+{
+  "name": "conversational-artifacts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "check": "node scripts/check-links.mjs",
+    "test": "node scripts/test-orchestra.mjs"
+  },
+  "devDependencies": {
+    "marked": "15.0.12"
+  }
+}

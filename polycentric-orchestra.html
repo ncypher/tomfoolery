@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Polycentric Orchestra · Conversational Artifacts</title>
+  <meta name="description" content="Conduct a small experiment in distributed judgment: preserve dissent, test a revision, and decide when to accept it.">
+  <link rel="stylesheet" href="assets/notebook.css">
+  <style>
+    .shell{width:min(1160px,calc(100% - 32px))}h1{margin:14px 0 22px}.intro{font-size:1.2rem;max-width:65ch}.eyebrow{font:12px monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}.diagram{margin:36px 0 24px;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:#070f15}.diagram svg{display:block;width:100%;height:auto}.console{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}.panel{border:1px solid var(--border);border-radius:20px;padding:26px;background:#0d1822}.panel h2{font-size:1.6rem;margin:10px 0}.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}button{font:600 14px system-ui;padding:11px 15px;border-radius:9px;border:1px solid #52766e;background:#193b34;color:#dbfff5;cursor:pointer}button:hover:not(:disabled){background:#26584a}button:disabled{opacity:.38;cursor:not-allowed}.secondary{background:transparent;border-color:#465769;color:#c9d4de}.dissent{border-color:#a65573;color:#ffc3d6;background:#321924}.facts{display:flex;flex-wrap:wrap;gap:20px;font:13px monospace;color:var(--muted);margin:18px 0}.facts strong{color:#ffd59d}.record{max-height:290px;overflow:auto;padding-left:24px;font-size:.92rem}.record li{padding:0 0 12px 8px}.footnote{font-size:.85rem;color:var(--muted)}.trace{stroke-dasharray:8 5;animation:flow 1.2s linear infinite}@keyframes flow{to{stroke-dashoffset:-26}}@media(max-width:760px){.console{grid-template-columns:1fr}.panel{padding:20px}}
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="shell">
+  <nav class="nav" aria-label="Notebook"><a href="./">Conversational Artifacts</a><span><a href="journal/">Journal Room</a> · <a href="artifacts/philosophy.html">Philosophy</a> · <a href="https://github.com/ncypher">Tom Harwood / ncypher</a></span></nav>
+  <main id="main">
+    <span class="eyebrow">An experiment in distributed judgment</span>
+    <h1>Trust the loop.<br>Keep the question open.</h1>
+    <p class="intro">A proposal is a beginning. Let a builder act, a reviewer disagree, and reality answer back. You decide when the evidence is enough.</p>
+    <div class="diagram" id="diagram"><img src="assets/polycentric-orchestra.svg" width="960" height="460" style="width:100%;height:auto" alt="Human direction connects proposal, implementation, review, dissent, and runtime feedback."></div>
+    <noscript><p>The diagram illustrates a feedback cycle. Enable JavaScript to conduct the experiment, or read the <a href="artifacts/workflow.html">workflow</a>.</p></noscript>
+    <div class="console" id="experiment" hidden>
+      <section class="panel" aria-labelledby="phase-title">
+        <span class="eyebrow">You hold the baton</span>
+        <div aria-live="polite" aria-atomic="true"><h2 id="phase-title">Intent</h2><p id="explanation"></p></div>
+        <div class="facts"><span>Revision <strong id="revision">1</strong></span><span>Evidence <strong id="evidence">pending</strong></span><span>Dissent retained <strong id="dissent-count">0</strong></span></div>
+        <div class="controls">
+          <button id="advance">Propose a direction</button>
+          <button id="pass" hidden>Check passes</button><button id="fail" class="dissent" hidden>Check fails</button>
+          <button id="dissent" class="dissent" hidden>Introduce dissent</button>
+          <button id="accept" disabled>Accept for now</button>
+          <button id="reset" class="secondary">Start over</button>
+        </div>
+        <p class="footnote">A teaching model with outcomes you choose. These checks illustrate the rules; they do not run real agents or tests. Acceptance requires passing evidence for the current revision.</p>
+      </section>
+      <section class="panel" aria-labelledby="record-title"><span class="eyebrow">The conversation leaves a record</span><h2 id="record-title">What happened</h2><ol class="record" id="record" tabindex="0" aria-label="Experiment history"></ol></section>
+    </div>
+    <h2>The rules are the point.</h2>
+    <p>Generation, review, and acceptance are separate responsibilities. Dissent reopens the proposal and stays in the record. A failed check requires a revision. Old evidence cannot certify new work. Passing a check makes acceptance possible; it does not make the decision for you.</p>
+    <p>Try accepting a result, then introducing a new objection. The system should be able to change its mind.</p>
+    <p><a href="artifacts/workflow.html">Read the workflow →</a> · <a href="feedback-knot.html">Explore Feedback Knot →</a></p>
+  </main>
+</div>
+<footer class="notebook-footer"><a href="./">Return to the collection</a><span>Still observing.</span></footer>
+<script type="module" src="assets/orchestra-ui.mjs"></script>
+</body></html>

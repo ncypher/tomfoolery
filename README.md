@@ -12,6 +12,8 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 
 | Artifact | What you can explore |
 | --- | --- |
+| [Project reoWren — Patreon](https://www.patreon.com/cw/ProjectreoWren) | Follow an experimental approach to community-owned reporting and radio-mesh communication |
+| [Office Hours](https://office-simulator.streamlit.app/) | Step into a three-person office where personalities, private conversations, and remembered moments shape the next meeting |
 | [Polycentric Orchestra](https://ncypher.github.io/tomfoolery/polycentric-orchestra.html) | Govern a proposal with dissent, revision-specific evidence, and human acceptance |
 | [Pixel Pet](https://ncypher.github.io/tomfoolery/pixel-pet.html) | Care for a pixel creature, grow a bond, and explore gentle feedback in a persistent terrarium |
 | [Feedback Knot](https://ncypher.github.io/tomfoolery/feedback-knot.html) | Follow development through disagreement, appeals, and reopened questions |

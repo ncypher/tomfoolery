@@ -26,6 +26,10 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 
 The earlier [Space Invaders](https://ncypher.github.io/tomfoolery/space-invaders-pro.html), [Snake](https://ncypher.github.io/tomfoolery/snake-pro.html), [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html), and [Three.js cube](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) remain part of the record. Pixel Pet has grown from the earlier virtual-pet sketch into a recoverable, persistent little world.
 
+## Model capability, made playable
+
+The small games began with the frontier AI models available when I made them. Their code was entirely generated; my role was prompting, guidance, and testing. I was the crash test dummy. Known model credits and subsequent revisions remain part of the record.
+
 ## The notebook behind the software
 
 I began with browser games because they made the results of a conversation immediately visible. The questions grew: how should tools disagree, what deserves trust, and how does an observation become a rule?
@@ -37,6 +41,8 @@ I am learning cybernetics through these working patterns. The collection is a de
 - [Philosophy](https://ncypher.github.io/tomfoolery/artifacts/philosophy.html): conversation as a development medium.
 - [Workflow](https://ncypher.github.io/tomfoolery/artifacts/workflow.html): how a thought circulates through implementation and evidence.
 - [Timeline](https://ncypher.github.io/tomfoolery/artifacts/timeline.html): a record of changing questions.
+- [Repo Excavations II](https://ncypher.github.io/tomfoolery/journal/2026/09-30-repo-excavations.html): aging evidence, shared meanings, coordination, and Ghost’s archived layers.
+- [I Was the Crash Test Dummy](https://ncypher.github.io/tomfoolery/journal/2026/09-30-crash-test-dummy.html): a conversation field note on entirely generated code and human experimentation.
 - [Repo Excavations](https://ncypher.github.io/tomfoolery/journal/2026/08-21-repo-excavations.html): failures that became rules, decoy realities, and software fossils.
 - [What the Wren Hears — field report](https://ncypher.github.io/tomfoolery/journal/2026/08-21-what-the-wren-hears.html): what a visible signal helped me understand.
 
@@ -53,7 +59,7 @@ npm run check
 npm test
 ```
 
-The room builder generates the three `artifacts/*.html` pages, `journal/index.html`, and the two field-note pages. Add new field notes to the page list in `scripts/build-pages.mjs`. Commit the sources and generated pages together. `.nojekyll` keeps GitHub Pages from independently interpreting the same Markdown and creating competing routes.
+The room builder generates the three `artifacts/*.html` pages, `journal/index.html`, and the registered field-note pages. Add new field notes to the page list in `scripts/build-pages.mjs`. Commit the sources and generated pages together. `.nojekyll` keeps GitHub Pages from independently interpreting the same Markdown and creating competing routes.
 
 The profile artwork is maintained in the related [ncypher repository](https://github.com/ncypher/ncypher). Its scored SVG is an illustrative animation. The interactive orchestra uses a small state machine with user-selected check outcomes; it does not claim to execute agents or real verification.
 

@@ -32,6 +32,22 @@ The journal is not a production schedule. It is an invitation to notice.
 <div class="step"><span>04</span><br><strong>Field report</strong><br><small>What did reality answer back?</small></div>
 </div>
 
+## New observations · September 30, 2026
+
+**[Repo Excavations II — When the Map Has to Answer to the Territory →](2026/09-30-repo-excavations.md)**
+
+Snapshots that age, different meanings of “move,” a quiet coordination board, and the layers preserved inside Ghost. A second excavation into how systems learn to check their own representations.
+
+**[I Was the Crash Test Dummy →](2026/09-30-crash-test-dummy.md)**
+
+The small games as records of frontier-model capability: entirely generated code, human curiosity, guidance, testing, and the next question.
+
+## Still observing
+
+What did the latest model make possible that the previous one could not? Which shared word hides different behaviors? When did evidence change my mind rather than merely support it?
+
+A conversation report can stay small: **starting belief → surprise → revision → next encounter**. Keep the moment the idea changed, then return to it after reality has had a turn.
+
 ## Signal field note
 
 [Read the field report: What the Wren Hears](2026/08-21-what-the-wren-hears.html).

@@ -23,6 +23,14 @@ Conversational development allows an idea to remain fluid longer. Discovery happ
 
 The quality of the finished software increasingly reflects the quality of the complete conversation—not the cleverness of one prompt.
 
+## Curiosity gets something to push against
+
+The small games began as experiments with the frontier models available at the time. Their code was entirely generated from prompts and subsequent guidance. My involvement was asking, trying, testing, and reporting back. I wanted to see what those models could make and what the results would teach me.
+
+That made an idea easier to encounter. I could press a button, move through a little world, and discover where my description was incomplete. Later revisions belong to that record too; an artifact can preserve an earlier capability while acquiring new behavior.
+
+[I Was the Crash Test Dummy](../journal/2026/09-30-crash-test-dummy.md) records that distinction. The [September excavation](../journal/2026/09-30-repo-excavations.md) follows the same curiosity into shared meanings, aging evidence, and operational memory.
+
 ## An ecology, not an oracle
 
 These experiments are rarely the product of one model or tool. ChatGPT, Claude, Gemini, NotebookLM, Grok, VS Code agents, image generators, music generators, tests, users, and runtime evidence contribute different strengths and different failure modes.

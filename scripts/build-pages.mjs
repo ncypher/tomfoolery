@@ -7,6 +7,8 @@ const pages = [
   ['artifacts/philosophy', 'Philosophy', '../'],
   ['artifacts/workflow', 'Workflow', '../'],
   ['artifacts/timeline', 'Timeline', '../'],
+  ['journal/2026/09-30-repo-excavations', 'Repo Excavations II', '../../'],
+  ['journal/2026/09-30-crash-test-dummy', 'I Was the Crash Test Dummy', '../../'],
   ['journal/index', 'Journal Room', '../'],
   ['journal/2026/08-21-repo-excavations', 'Repo Excavations', '../../'],
   ['journal/2026/08-21-what-the-wren-hears', 'What the Wren Hears — Field Note', '../../'],

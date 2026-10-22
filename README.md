@@ -1,4 +1,4 @@
-﻿# Conversational Artifacts
+# Conversational Artifacts
 
 ### Collecting thoughts that wanted to become software.
 
@@ -15,6 +15,7 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 | [Project reoWren — Patreon](https://www.patreon.com/cw/ProjectreoWren) | Follow an experimental approach to community-owned reporting and radio-mesh communication |
 | [Chasing the Flush](https://huggingface.co/spaces/Strange-Loop/chasing.the.flush) · [Source](https://github.com/ncypher/chasing.the.flush) | Explore ten days of spring morel season in a Michigan woodland; Sonnet 5.5 coding, testing, and deployment with Opus 5.5 orchestration |
 | [Office Hours](https://office-simulator.streamlit.app/) | Step into a three-person office where personalities, private conversations, and remembered moments shape the next meeting |
+| [8.5 Ball](https://ncypher.github.io/8.5_Ball/) · [Source](https://github.com/ncypher/8.5_Ball) | Grab and rotate a fluid-filled digital oracle, shake the floating answer die, and consult eight different personalities |
 | [Polycentric Orchestra](https://ncypher.github.io/tomfoolery/polycentric-orchestra.html) | Govern a proposal with dissent, revision-specific evidence, and human acceptance |
 | [Pixel Pet](https://ncypher.github.io/tomfoolery/pixel-pet.html) | Care for a pixel creature, grow a bond, and explore gentle feedback in a persistent terrarium |
 | [Feedback Knot](https://ncypher.github.io/tomfoolery/feedback-knot.html) | Follow development through disagreement, appeals, and reopened questions |

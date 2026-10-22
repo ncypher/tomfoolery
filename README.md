@@ -30,6 +30,18 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 
 The earlier [Space Invaders](https://ncypher.github.io/tomfoolery/space-invaders-pro.html), [Snake](https://ncypher.github.io/tomfoolery/snake-pro.html), [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html), and [Three.js cube](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) remain part of the record. Pixel Pet has grown from the earlier virtual-pet sketch into a recoverable, persistent little world.
 
+## One puzzle, three generations
+
+[![Claude Opus 5.5's Rubik's Cube mid-solve: the middle layer stage is highlighted, with the solution listed move by move](assets/rubiks-cube-opus-5-5.jpg)](https://ncypher.github.io/tomfoolery/rubiks-cube-opus-5-5.html)
+
+The Rubik's Cube has been built here three times, by three generations of models, and all three stay playable side by side:
+
+| Version | What it does |
+| --- | --- |
+| [Earlier Three.js cube](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) | Lighting, camera controls, and an early take on 3D browser interaction. |
+| [GPT-5.6 Sol](https://ncypher.github.io/tomfoolery/rubiks-cube-gpt-5-6-sol.html) | A coordinate state engine with legal turns and scrambles. Stickers jump to their new places rather than turning, and Solve plays your history backward. |
+| [**Claude Opus 5.5**](https://ncypher.github.io/tomfoolery/rubiks-cube-opus-5-5.html) | Real layers: drag a sticker and nine cubies turn. Solve works from any position, however the cube got mixed, layer by layer in seven stages, highlighting each move as it goes. 2,000 random scrambles solved in testing, about 1 ms each. |
+
 ## Model capability, made playable
 
 The small games began with the frontier AI models available when I made them. Their code was entirely generated; my role was prompting, guidance, and testing. I was the crash test dummy. Known model credits and subsequent revisions remain part of the record.

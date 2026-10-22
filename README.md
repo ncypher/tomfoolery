@@ -25,6 +25,7 @@ Small browser worlds, systems experiments, and field notes by [Tom Harwood / ncy
 | [The Noisy Channel](https://ncypher.github.io/tomfoolery/shannon-noisy-channel.html) | Manipulate entropy, coding, noise, and error recovery |
 | [What the Wren Hears](https://ncypher.github.io/tomfoolery/what-the-wren-hears.html) | See radio symbols as cyclic chirps |
 | [Mandelbrot Lab](https://ncypher.github.io/tomfoolery/mandelbrot-lab.html) | Explore recursive structure through mathematical visualization |
+| [Rubik's Cube — Opus 5.5](https://ncypher.github.io/tomfoolery/rubiks-cube-opus-5-5.html) | Drag stickers to turn real layers, then watch a layer-by-layer solver finish from any position |
 | [Rubik's Cube — GPT-5.6 Sol](https://ncypher.github.io/tomfoolery/rubiks-cube-gpt-5-6-sol.html) | Inspect legal turns, scrambling, and an inverse-history solver |
 
 The earlier [Space Invaders](https://ncypher.github.io/tomfoolery/space-invaders-pro.html), [Snake](https://ncypher.github.io/tomfoolery/snake-pro.html), [Cyber Runner](https://ncypher.github.io/tomfoolery/cyber-runner.html), and [Three.js cube](https://ncypher.github.io/tomfoolery/rubiks-cube-pro.html) remain part of the record. Pixel Pet has grown from the earlier virtual-pet sketch into a recoverable, persistent little world.

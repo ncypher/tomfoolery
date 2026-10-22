@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A Rubik's Cube built by Claude Opus 5.5: real turning layers, drag-to-turn, and a solver that works from any position, layer by layer.">
+<meta name="theme-color" content="#16171b">
+<meta name="generator" content="Claude Opus 5.5 / Anthropic, generated for ncypher Conversational Artifacts on 2026-10-22">
+<title>Rubik's Cube, Opus 5.5 edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --graphite:#16171b; --panel:#1e1f24; --line:#2e3037; --ink:#ecebe6; --muted:#9d9ca5;
+  --white:#f4f4ef; --yellow:#ffd23a; --green:#1fa65a; --blue:#2a62d9; --red:#d8312b; --orange:#ff8a1f;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--graphite);color:var(--ink);font:400 16px/1.55 var(--sans)}
+a{color:inherit;text-underline-offset:.2em}
+:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:18px clamp(16px,3vw,32px);border-bottom:1px solid var(--line)}
+.top a{text-decoration:none;color:var(--muted);font-size:.92rem}
+.top a:hover{color:var(--ink)}
+.top h1{margin:0;font-size:1rem;font-weight:600;letter-spacing:.01em}
+.top h1 span{color:var(--muted);font-weight:400}
+
+.lab{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);min-height:calc(100vh - 61px)}
+.stage{position:relative;min-height:420px;touch-action:none;cursor:grab;
+  background:radial-gradient(60% 55% at 50% 45%,#24262d 0%,var(--graphite) 70%)}
+.stage.grab-space{cursor:grabbing}
+.stage.grab-face{cursor:crosshair}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage-hint{position:absolute;left:0;right:0;bottom:16px;margin:0;text-align:center;color:var(--muted);font-size:.88rem;pointer-events:none;padding:0 16px}
+.home{position:absolute;top:14px;right:14px;background:rgba(30,31,36,.8);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.85rem}
+
+.panel{border-left:1px solid var(--line);padding:clamp(20px,3vw,36px);display:flex;flex-direction:column;gap:26px;max-height:calc(100vh - 61px);overflow:auto}
+.lede{margin:0;font-size:1.28rem;line-height:1.35;font-weight:500;max-width:30ch}
+.note{margin:-14px 0 0;color:var(--muted);font-size:.92rem;min-height:1.4em;overflow-wrap:anywhere}
+
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.actions button{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 16px;font-weight:600}
+.actions button:hover:not(:disabled){border-color:var(--muted)}
+.actions .go{background:var(--ink);color:var(--graphite);border-color:var(--ink)}
+.actions .go:hover:not(:disabled){background:#fff}
+
+.readout{display:flex;gap:28px;align-items:baseline}
+.readout p{margin:0;color:var(--muted);font-size:.9rem}
+.readout strong{display:block;color:var(--ink);font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+#status[data-state="solved"]{color:var(--green)}
+#status[data-state="solving"]{color:var(--yellow)}
+
+h2{margin:0 0 10px;font-size:.95rem;font-weight:600}
+.stages{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:st}
+.stages li{counter-increment:st;display:flex;gap:10px;align-items:center;padding:6px 10px;border-radius:8px;color:var(--muted);font-size:.93rem}
+.stages li::before{content:counter(st);width:1.5em;height:1.5em;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:.75rem;flex:none}
+.stages li.now{background:var(--panel);color:var(--ink)}
+.stages li.now::before{border-color:var(--yellow);color:var(--yellow)}
+.stages li.done{color:var(--ink)}
+.stages li.done::before{content:"✓";border-color:var(--green);color:var(--green)}
+
+.ledger{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#18191d}
+.ledger:empty::before{content:"The solution appears here, stage by stage.";color:var(--muted);font-size:.9rem}
+.row + .row{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.row-stage{margin:0 0 4px;font-size:.82rem;color:var(--muted)}
+.row-moves{margin:0;font:400 .9rem/1.8 var(--mono);word-spacing:.15em}
+.mv{padding:1px 3px;border-radius:4px}
+.mv.now{background:var(--yellow);color:var(--graphite)}
+
+details{border-top:1px solid var(--line);padding-top:14px}
+summary{cursor:pointer;font-weight:600;font-size:.95rem}
+.pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:12px}
+.pad button{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 0;font:500 .9rem var(--mono)}
+.pad button:hover:not(:disabled){border-color:var(--muted)}
+.keys{color:var(--muted);font-size:.88rem;margin:12px 0 0}
+.keys kbd{font:500 .82rem var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink)}
+.speed{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:.9rem;color:var(--muted)}
+.speed input{flex:1;accent-color:var(--yellow)}
+
+.compare{border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:.92rem}
+.compare p{margin:0 0 8px}
+.compare a{color:var(--ink)}
+
+@media (max-width:900px){
+  .lab{grid-template-columns:1fr}
+  .stage{height:min(calc(100vw + 56px),600px);min-height:0}
+  .stage-hint{bottom:10px;font-size:.82rem}
+  .top .long{display:none}
+  .panel{border-left:0;border-top:1px solid var(--line);max-height:none}
+  .lede{max-width:none}
+}
+@media (max-width:420px){.pad{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js"}}</script>
+<script type="module" src="assets/cube-ui.mjs"></script>
+</head>
+<body>
+<header class="top">
+  <h1>Rubik’s Cube <span>· Opus 5.5 edition</span></h1>
+  <a href="index.html#collection">← <span class="long">Back to the </span>collection</a>
+</header>
+<main class="lab">
+  <section class="stage" id="stage" aria-label="3D cube. Drag a sticker to turn its layer; drag empty space to look around.">
+    <button class="home" id="home" type="button">Reset view</button>
+    <p class="stage-hint">Drag a sticker to turn its layer. Drag the space around it to look around.</p>
+  </section>
+
+  <aside class="panel">
+    <div>
+      <p class="lede">A cube that turns like a real one, and solves from wherever you leave it.</p>
+    </div>
+    <p class="note" id="note" aria-live="polite">Turn it yourself, scramble it, then ask it to solve. It works from any position.</p>
+
+    <div class="actions">
+      <button class="go" id="scramble" type="button">Scramble</button>
+      <button class="go" id="solve" type="button">Solve</button>
+      <button id="undo" type="button">Undo</button>
+      <button id="reset" type="button">Reset</button>
+    </div>
+
+    <div class="readout">
+      <p><strong id="moveCount">0</strong>moves</p>
+      <p><strong id="status" data-state="solved">Solved</strong>state</p>
+    </div>
+
+    <section aria-labelledby="stagesTitle">
+      <h2 id="stagesTitle">How it solves</h2>
+      <ol class="stages" id="stages"></ol>
+    </section>
+
+    <section aria-labelledby="ledgerTitle">
+      <h2 id="ledgerTitle">Solution</h2>
+      <div class="ledger" id="ledger"></div>
+    </section>
+
+    <details>
+      <summary>Face turns and keys</summary>
+      <div class="pad" id="pad"></div>
+      <p class="keys"><kbd>U</kbd> <kbd>D</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>F</kbd> <kbd>B</kbd> turn clockwise, with <kbd>Shift</kbd> for counter-clockwise. <kbd>Backspace</kbd> undoes.</p>
+      <label class="speed">Turn speed <input id="speed" type="range" min="60" max="420" step="20" value="220" aria-label="Turn duration"></label>
+    </details>
+
+    <div class="compare">
+      <p>Built by Claude Opus 5.5 for Tom Harwood’s Conversational Artifacts, October 2026. The solver works layer by layer, the way people learn it, and searches for each step instead of rewinding your moves.</p>
+      <p>Compare: <a href="rubiks-cube-gpt-5-6-sol.html">GPT-5.6 Sol’s cube</a> · <a href="rubiks-cube-pro.html">the earlier Three.js cube</a></p>
+    </div>
+  </aside>
+</main>
+</body>
+</html>

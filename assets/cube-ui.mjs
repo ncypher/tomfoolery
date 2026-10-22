@@ -248,7 +248,7 @@ els.solve.addEventListener('click', () => {
     renderSolution(steps);
     const flat = steps.flatMap(s => s.moves.map((move, i) => ({ move, stage: s.stage, i })));
     solving = { steps, flat, index: 0 };
-    els.note.textContent = `Found a ${flat.length}-move solution in ${steps.length} stages, layer by layer.`;
+    els.note.textContent = `Found a ${flat.length}-move solution, layer by layer.`;
     syncUI();
     flat.forEach((step, k) => enqueue(step.move, {
       record: true,

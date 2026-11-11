@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Alan Turing's 1952 paper on how patterns form, as a working dish of two chemicals. Stir it, touch it, change how fast each one spreads, and find the setting where spots and stripes cannot exist.">
+<meta name="generator" content="Claude Fable 5.2 / Anthropic, written for ncypher Conversational Artifacts on 2026-11-10">
+<meta name="color-scheme" content="light">
+<title>The Chemical Basis of Morphogenesis · Playable Edition</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2715%27 fill=%27%23fcfcfb%27 stroke=%27%2314161a%27 stroke-width=%272%27/%3E%3Ccircle cx=%2711%27 cy=%2712%27 r=%276%27 fill=%27%2300a3d7%27 opacity=%27.55%27/%3E%3Ccircle cx=%2711%27 cy=%2712%27 r=%273%27 fill=%27%23d81b7a%27/%3E%3Ccircle cx=%2721%27 cy=%2720%27 r=%276%27 fill=%27%2300a3d7%27 opacity=%27.55%27/%3E%3Ccircle cx=%2721%27 cy=%2720%27 r=%273%27 fill=%27%23d81b7a%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&amp;display=swap">
+<link rel="stylesheet" href="assets/turing.css">
+</head>
+<body>
+<a class="skip" href="#abstract">Skip to the paper</a>
+<div class="sheet">
+
+<header class="running">
+  <span>Phil. Trans. R. Soc. B 237 (1952) 37–72 · playable edition</span>
+  <a href="index.html">Conversational Artifacts ↗</a>
+</header>
+
+<div class="titleblock">
+  <p class="folio">[ 37 ]</p>
+  <h1>The Chemical Basis of Morphogenesis</h1>
+  <p class="author">By A. M. Turing, F.R.S. <span>University of Manchester</span></p>
+  <p class="dates">(Received 9 November 1951. Revised 15 March 1952. Published 14 August 1952.)</p>
+</div>
+<p class="byline">Playable edition written and built in 2026 by Claude Fable 5.2, a machine of the kind its author asked about in 1950.</p>
+
+<section class="abstract" id="abstract" aria-labelledby="abs-h">
+  <h2 id="abs-h">Abstract</h2>
+  <p>In 1952 Alan Turing, already known for the mathematics of computing, published a paper about biology. It asks how an embryo that begins as a nearly uniform ball of cells comes to have a pattern, and it answers with a recipe short enough to say aloud: let two substances react with each other, and let them spread through the tissue at different speeds. He called the substances morphogens. He showed on paper that such a mixture can sit perfectly still when it is evenly mixed and yet break into regular spots or waves at the slightest disturbance. This edition is that mixture. The dish below solves his equations while you watch, with one term added so that the pattern stops growing. Stir it, touch it, change how fast each chemical spreads, and find the setting where a pattern cannot exist.</p>
+</section>
+
+<figure class="fig" id="fig-dish">
+  <div class="fig-body">
+    <div class="fig-split">
+      <div class="dishcol">
+        <div class="dishwrap"><canvas id="dish" width="512" height="512" role="img" aria-label="A round dish in which two chemicals form a pattern of spots or stripes. Drag across it to add activator." tabindex="0"></canvas></div>
+        <canvas id="slice" height="120" aria-label="Cross-section through the middle of the dish: activator peaks are narrow, inhibitor humps are wide"></canvas>
+        <p class="axis">cross-section along the dashed line · <span class="key a">activator</span> <span class="key b">inhibitor</span></p>
+      </div>
+      <div class="panel">
+        <div class="group" role="group" aria-label="Show"><span class="lab">Show</span><div class="row" id="views"></div></div>
+        <div class="group" role="group" aria-label="Recipes"><span class="lab">Recipe</span><div class="row" id="presets"></div></div>
+        <label class="slider" for="ratio"><span>Inhibitor spreads <output id="ratio-out"></output> faster</span><input type="range" id="ratio" min="1" max="16" step="0.5"></label>
+        <label class="slider" for="bias"><span>Bias <output id="bias-out"></output></span><input type="range" id="bias" min="-1.1" max="1.1" step="0.05"></label>
+        <label class="slider" for="scale"><span>Reach <output id="scale-out"></output></span><input type="range" id="scale" min="0.6" max="3" step="0.1"></label>
+        <p class="verdict" id="dish-verdict" aria-live="polite"></p>
+        <div class="row">
+          <button type="button" class="btn" id="stir">Stir</button>
+          <button type="button" class="btn" id="wipe">Wipe clean</button>
+          <button type="button" class="btn" id="pause" aria-pressed="false">Pause</button>
+        </div>
+        <div class="group" role="group" aria-label="Take something away"><span class="lab">Take something away</span>
+          <div class="row"><button type="button" class="btn toggle" id="equal" aria-pressed="false">Same speed for both</button><button type="button" class="btn toggle" id="noreact" aria-pressed="false">Stop the reaction</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <figcaption><b>Figure 1.</b> A dish of two chemicals. Magenta is the activator, which makes more of itself. Cyan is the inhibitor, which the activator also makes, and which shuts the activator down. Drag across the dish to add activator. The strip underneath is a slice through the middle.</figcaption>
+</figure>
+
+<section id="s1">
+  <h2><span class="num">1.</span> Spreading is supposed to erase things</h2>
+  <p>A drop of ink in water spreads until the water is evenly grey. Diffusion smooths. That is why Turing's result was a surprise, and why it still feels like a trick: he showed that diffusion can be the thing that <em>creates</em> a pattern, provided two substances are involved and one of them travels faster than the other.</p>
+  <p>Here is the mechanism in the dish. Where a little extra activator appears, it makes more activator, and it also makes inhibitor. The inhibitor leaks away sideways faster than the activator does. So at the centre the activator stays ahead and a peak grows, while a short distance away the inhibitor arrives first and holds everything down. Further out still, beyond the inhibitor's reach, another peak is free to start. The spacing between peaks is set by how far the inhibitor travels. The slice under the dish shows it: the magenta line swings hard between high and low, while the cyan line follows more gently, because the inhibitor has spread further and its hills are lower and smoother.</p>
+  <p>Three things to try. Press <b>Wipe clean</b>: a perfectly even dish is a resting state and nothing happens, until you touch it once. Press <b>Same speed for both</b>: the pattern melts, because without the difference in speed there is no mechanism. Then slide the speed ratio down slowly and find the edge. For this recipe the algebra puts it at exactly 4.5.</p>
+  <p>The words activator and inhibitor are not Turing's. He wrote the theory for any pair of reacting substances; Alfred Gierer and Hans Meinhardt gave it this reading twenty years later, and it has become the usual way to explain it.</p>
+</section>
+
+<section id="s2">
+  <h2><span class="num">2.</span> Which size wins</h2>
+  <p>Turing did not have a dish. He had pencil, paper and time on one of the first computers, so he chose a case he could solve: a ring of cells, which he called <q>mathematically convenient, though biologically unusual</q>. A ring lets you ask a precise question. Take the evenly mixed state and add a faint ripple with some number of lobes. Does that ripple grow or fade?</p>
+  <p>The answer depends on the size of the ripple. Very fine ripples fade, because the activator's own spreading smooths them away. Very broad ones fade too, because the inhibitor has time to catch up everywhere. In between there is a band that grows, and the ripple that grows fastest takes over the ring. Since only a whole number of lobes fits around a ring, changing its size changes the count. Turing suggested this is how a <i>Hydra</i> comes to have a definite number of tentacles, and a stem a whorl of leaves.</p>
+  <figure class="fig" id="fig-ring">
+    <div class="fig-body">
+      <div class="fig-split">
+        <div><svg id="ring" viewBox="0 0 320 320" role="img" aria-label="A ring of cells whose outline bulges where the activator is high"></svg></div>
+        <div class="panel">
+          <div id="rates" class="chart"></div>
+          <p class="axis">growth rate of each possible lobe count</p>
+          <label class="slider" for="ring-n"><span>Ring of <output id="ring-n-out"></output> cells</span><input type="range" id="ring-n" min="12" max="96" step="2"></label>
+          <label class="slider" for="ring-ratio"><span>Inhibitor spreads <output id="ring-ratio-out"></output> faster</span><input type="range" id="ring-ratio" min="1" max="12" step="0.5"></label>
+          <p class="verdict" id="ring-verdict" aria-live="polite"></p>
+          <div class="row"><button type="button" class="btn" id="ring-stir">Stir the ring</button></div>
+        </div>
+      </div>
+    </div>
+    <figcaption><b>Figure 2.</b> Turing's ring. The bars are his calculation, done here for every lobe count that fits: bars above the line grow, bars below fade, and the tallest is the prediction. The ring on the left is a separate simulation of the same cells. It nearly always settles on the predicted count. When two neighbouring counts grow at almost the same rate it sometimes takes the other.</figcaption>
+  </figure>
+</section>
+
+<section id="s3">
+  <h2><span class="num">3.</span> Spots, stripes and what is left out</h2>
+  <p>Turing's analysis covers the first moment, when the ripple is small. He says so himself: his investigation stops where the instability sets in. On its own that mathematics grows without limit, so the dish adds one braking term, and a second term, the <b>Bias</b> slider, that treats too much activator differently from too little. With no bias, high and low are mirror images and the dish makes stripes. Push the bias one way and the high regions shrink into spots. Push it the other way and they join into a net with holes.</p>
+  <p class="eq"><span>∂<i>u</i>/∂<i>t</i> = <i>D<sub>u</sub></i>∇²<i>u</i> + <i>u</i> − <i>v</i> + <i>q</i><i>u</i>² − <i>u</i>³&emsp;&emsp;∂<i>v</i>/∂<i>t</i> = <i>D<sub>v</sub></i>∇²<i>v</i> + 2<i>u</i> − 1.5<i>v</i></span><span class="eqn">(1)</span></p>
+  <p>Here <i>u</i> and <i>v</i> are how far the activator and inhibitor are from their resting levels, and <i>q</i> is the bias. Remove <i>qu</i>² and <i>u</i>³ and these are the linear equations of the paper.</p>
+  <p>The patterns look like animal coats, and Turing noted that one of his examples resembled dappling. Looking alike is not evidence, and for decades nobody could show the mechanism at work in anything real. The first laboratory chemical pattern of this kind was made in Bordeaux in 1990, thirty-eight years after the paper. In 1995 Shigeru Kondo and Rihito Asai reported that the stripes of a marine angelfish shift and split as the fish grows, in the way a reaction-diffusion wave would. Not everyone accepted that as proof. Many patterns in biology are now known to form in other ways entirely, so the dish is a demonstration of what chemistry can do, with no claim about any particular zebra.</p>
+  <p>Turing published this paper in August 1952 and died in June 1954. Two years before it, he had asked in print whether a machine could think. One of them has now typeset his biology, which I doubt is the test he had in mind.</p>
+</section>
+
+<section class="colophon" id="colophon">
+  <h2>About this edition</h2>
+  <p>Written and built by Claude Fable 5.2 in November 2026 for Tom Harwood's <a href="index.html">Conversational Artifacts</a>, as the second of the Playable Papers. The first is <a href="https://ncypher.github.io/attention-is-all-you-need/">Attention Is All You Need</a>. Each takes one paper, puts a working model of it on the page, and gives you something to remove.</p>
+  <p>The dish is a grid 128 cells wide with a wall that nothing crosses. It advances equation (1) in small explicit time steps, in plain JavaScript with no libraries. The simulation is in <a href="assets/turing-engine.mjs">assets/turing-engine.mjs</a> and its checks are in <code>scripts/test-turing.mjs</code>: they confirm that patterns appear above the 4.5 threshold and not below it, and that the ring matches the calculation.</p>
+  <p>Source: A. M. Turing, “The Chemical Basis of Morphogenesis,” <i>Philosophical Transactions of the Royal Society of London B</i> 237 (1952), 37–72, <a href="https://doi.org/10.1098/rstb.1952.0012">doi:10.1098/rstb.1952.0012</a>. Also mentioned: Gierer and Meinhardt (1972); Castets, Dulos, Boissonade and De Kepper (1990); Kondo and Asai (1995). This is an independent explanation, not affiliated with the Royal Society.</p>
+</section>
+
+<footer class="pageno">37</footer>
+</div>
+
+<noscript><p class="noscript">This page runs a small simulation in JavaScript. With scripts off, the text still reads but the dish stays empty.</p></noscript>
+<script type="module" src="assets/turing-ui.mjs"></script>
+</body>
+</html>
